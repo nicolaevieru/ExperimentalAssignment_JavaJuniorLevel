@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+    <changeSet author="dragos.slujeru" id="1">
+        <createTable tableName="test"
+                     remarks="Create test table">
+            <column name="id" type="int">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="TEST_PK"/>
+            </column>
+            <column name="dname" type="varchar2(14)"
+                    remarks="The official department name as registered on the internal website."/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

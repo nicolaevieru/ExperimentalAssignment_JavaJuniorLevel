@@ -12,7 +12,7 @@ public class VinylStoreApplication {
 		System.out.println("yiyiy");
 		System.out.println("fsgfasd");
 		System.out.println("fsgfasd");
-		System.out.println("dragos")
+		System.out.println("dragos");
 
 	}
 }
