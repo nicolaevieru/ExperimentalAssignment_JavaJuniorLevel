@@ -6,4 +6,10 @@
 	<include file="db/changelog/db.changelog-accountType.xml"/>
 	<include file="db/changelog/db.changelog-account.xml"/>
 	<include file="db/changelog/db.changelog-token.xml"/>
+	
+	<include file="db/changelog/db.changelog-cart_state.xml"/>
+	<include file="db/changelog/db.changelog-cart.xml"/>
+	<include file="db/changelog/db.changelog-vinyl.xml"/>
+	<include file="db/changelog/db.changelog-item.xml"/>
+	
 </databaseChangeLog>
