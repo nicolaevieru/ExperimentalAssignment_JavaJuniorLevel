@@ -8,11 +8,5 @@ public class VinylStoreApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(VinylStoreApplication.class, args);
-		
-		System.out.println("yiyiy");
-		System.out.println("fsgfasd");
-		System.out.println("fsgfasd");
-		System.out.println("dragos");
-
 	}
 }
