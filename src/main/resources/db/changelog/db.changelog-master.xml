@@ -12,4 +12,6 @@
 	<include file="db/changelog/db.changelog-vinyl.xml"/>
 	<include file="db/changelog/db.changelog-item.xml"/>
 	
+	<include file="db/changelog/db.changelog-account-unique-constraint.xml"/>
+	
 </databaseChangeLog>
