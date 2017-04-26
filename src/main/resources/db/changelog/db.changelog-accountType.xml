@@ -9,8 +9,8 @@
 				<constraints nullable="false" primaryKey="true"
 					primaryKeyName="ACCOUNT_TYPE_PK" /> 
 			</column>
-			<column name="typeName" type="varchar2(100)">
-				<constraints nullable="false"/>
+			<column name="type" type="varchar2(100)">
+				<constraints nullable="false" unique="true"/>
 			</column>
 		</createTable>
 	</changeSet>

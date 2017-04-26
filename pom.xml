@@ -64,6 +64,11 @@
 			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0.4.0-atlassian-hosted</version>
 		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
