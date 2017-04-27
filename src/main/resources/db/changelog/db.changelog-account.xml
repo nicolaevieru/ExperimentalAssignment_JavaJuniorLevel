@@ -9,17 +9,20 @@
 				<constraints nullable="false" primaryKey="true"
 					primaryKeyName="USER_PK" /> 
 			</column>
-			<column name="firstName" type="varchar2(255)">
+			<column name="first_name" type="varchar2(255)">
 				<constraints nullable="false"/>
 			</column>
-			<column name="lastName" type="varchar2(255)">
+			<column name="last_name" type="varchar2(255)">
 				<constraints nullable="false"/>
 			</column>
 			<column name="email" type="varchar2(100)">
 				<constraints nullable="false"/>
 			</column>
-			<column name="typeId" type="int">
-				<constraints references="ACCOUNT_TYPE(id)" foreignKeyName="ACCOUNT_TYPE_FK" unique="true" nullable="false"/>
+			<column name="password_hash" type="varchar2(255)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="type_id" type="int">
+				<constraints references="ACCOUNT_TYPE(id)" foreignKeyName="ACCOUNT_TYPE_FK" nullable="false"/>
 			</column>
 		</createTable>
 	</changeSet>

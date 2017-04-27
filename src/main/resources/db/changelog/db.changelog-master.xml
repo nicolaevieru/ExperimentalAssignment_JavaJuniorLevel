@@ -15,5 +15,8 @@
 	<include file="db/changelog/db.changelog-item.xml" />
 
 	<include file="db/changelog/db.changelog-account-unique-constraint.xml" />
-
+	
+<!-- 	<include file="db/changelog/db.changelog-account-unique-constraint.xml"/> -->
+	<include file="db/changelog/db.changelog-auto-increment-sequence.xml"/>
+	
 </databaseChangeLog>
