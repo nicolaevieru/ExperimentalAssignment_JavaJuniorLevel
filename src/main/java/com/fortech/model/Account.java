@@ -1,7 +1,9 @@
 package com.fortech.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,15 +11,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
-import com.fortech.model.dto.AccountCreateDTO;
+import com.fortech.model.dto.AccountCreateDto;
+import com.fortech.service.AccountListener;
 
 @Entity
+@EntityListeners(AccountListener.class)
 public class Account {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HIBERNATE_SEQ")
 	@SequenceGenerator(name = "HIBERNATE_SEQ", sequenceName = "HIBERNATE_SEQ", allocationSize=1)
 	private Integer id;
+	@Column(name = "PASSWORD_HASH")
 	private String passwordHash;
 	private String email;
 	private String firstName;
@@ -30,7 +35,7 @@ public class Account {
 	public Account() {
 	}
 	
-	public Account(AccountCreateDTO toCopy) {
+	public Account(AccountCreateDto toCopy) {
 		this.firstName = toCopy.getFirstName();
 		this.lastName = toCopy.getLastName();
 		this.email = toCopy.getEmail();

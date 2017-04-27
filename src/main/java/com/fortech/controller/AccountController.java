@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fortech.model.Account;
-import com.fortech.model.dto.AccountCreateDTO;
+import com.fortech.model.dto.AccountCreateDto;
 import com.fortech.service.AccountService;
 import com.fortech.service.validator.AccountValidator;
 import com.fortech.service.validator.Validator;
@@ -22,8 +22,8 @@ public class AccountController {
 	private AccountService accountService;
 	
 	@RequestMapping(value = "users", method = RequestMethod.POST)
-	public ResponseEntity<Account> createAccount(@RequestBody AccountCreateDTO request) {
-		Validator<AccountCreateDTO> accountValidator = new AccountValidator(request);
+	public ResponseEntity<Account> createAccount(@RequestBody AccountCreateDto request) {
+		Validator<AccountCreateDto> accountValidator = new AccountValidator(request);
 		accountValidator.validate();
 		Account account = new Account(request);
 		accountService.save(account);

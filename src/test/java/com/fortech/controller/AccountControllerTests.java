@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.fortech.model.dto.AccountCreateDTO;
+import com.fortech.model.dto.AccountCreateDto;
 
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations="classpath:application-test.properties")
@@ -22,8 +22,8 @@ import com.fortech.model.dto.AccountCreateDTO;
 public class AccountControllerTests {
 	
 	private static final String URL = "http://localhost:9000/api/users";
-	private ResponseEntity<AccountCreateDTO> response;
-	private static AccountCreateDTO testAccount;
+	private ResponseEntity<AccountCreateDto> response;
+	private static AccountCreateDto testAccount;
 	
 	@Autowired
     private TestRestTemplate restTemplate;
@@ -33,7 +33,7 @@ public class AccountControllerTests {
 	public void testPostWithValidDataReturnsCreated() {
 		
 		testAccount = createAccount("John", "Doe","johndoe@example.com","Pas$wo5rdaaaa");
-		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDTO.class);
+		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDto.class);
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
 	}
@@ -41,7 +41,7 @@ public class AccountControllerTests {
 	public void testPostWithInvalidEmailReturns400() {
 		
 		testAccount = createAccount("John", "Doe","johndoesexample.com","Pas$wo5rdaaaa");
-		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDTO.class);
+		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDto.class);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 		
 	}
@@ -50,7 +50,7 @@ public class AccountControllerTests {
 	public void testPostWithInvalidPasswordlReturns400() {
 		
 		testAccount = createAccount("John", "Doe","johndoe@example.com","password");
-		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDTO.class);
+		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDto.class);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 		
 	}
@@ -59,14 +59,14 @@ public class AccountControllerTests {
 	public void testPostWithInvalidNameReturns400() {
 		
 		testAccount = createAccount("John", "D","johndoe@example.com","Pas$wo5rdaaaa");
-		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDTO.class);
+		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDto.class);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 		
 	}
 	
 	
-	public static AccountCreateDTO createAccount(String firstName, String lastName, String email, String password) {
-		AccountCreateDTO testAccount = new AccountCreateDTO();
+	public static AccountCreateDto createAccount(String firstName, String lastName, String email, String password) {
+		AccountCreateDto testAccount = new AccountCreateDto();
 		testAccount.setFirstName(firstName);
 		testAccount.setLastName(lastName);
 		testAccount.setEmail(email);
@@ -77,7 +77,7 @@ public class AccountControllerTests {
 	
 	@Before
 	public void resetAccount() {
-		testAccount = new AccountCreateDTO();
+		testAccount = new AccountCreateDto();
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.fortech.model.dto;
 
-public class AccountCreateDTO {
+public class AccountCreateDto {
 	
 	private String firstName;
 	private String lastName;

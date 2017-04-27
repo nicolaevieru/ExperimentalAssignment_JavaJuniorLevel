@@ -18,7 +18,7 @@
 			<column name="email" type="varchar2(100)">
 				<constraints nullable="false"/>
 			</column>
-			<column name="password_hash" type="varchar2(100)">
+			<column name="password_hash" type="varchar2(255)">
 				<constraints nullable="false"/>
 			</column>
 			<column name="type_id" type="int">
