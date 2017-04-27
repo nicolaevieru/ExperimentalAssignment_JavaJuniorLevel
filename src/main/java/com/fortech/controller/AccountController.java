@@ -16,6 +16,10 @@ import com.fortech.model.dto.AccountLoginDto;
 import com.fortech.service.AccountService;
 import com.fortech.service.TokenService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(value = "api")
 public class AccountController {
@@ -26,12 +30,23 @@ public class AccountController {
 	@Autowired
 	private TokenService tokenService;
 	
+	@ApiOperation(value = "Create an account.")
+	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_CREATED, message = ""),
+			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") }
+
+	)
 	@RequestMapping(value = "users", method = RequestMethod.POST)
 	public ResponseEntity<Account> createAccount(@RequestBody AccountCreateDto request) {
 		accountService.save(request);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
+	
+	@ApiOperation(value = "Login into account.")
+	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_CREATED, message = ""),
+			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") }
+
+	)
 	@RequestMapping(value = "users/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<Map<String, String>> loginAccount(@RequestBody AccountLoginDto request) {
 		Map<String, String> json = new HashMap<String, String>();

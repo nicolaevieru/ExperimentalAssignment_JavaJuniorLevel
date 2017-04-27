@@ -23,17 +23,15 @@ public class VinylController {
 	private VinylService vinylService;
 
 	@ApiOperation(value = "Create and store a vinyl in the database.")
-	@ApiResponses(value={
-			@ApiResponse(code = org.apache.http.HttpStatus.SC_CREATED ,message= ""),
-			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST ,message= "If the json request fields are not valid.")
-	}
-			
-			)
+	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_CREATED, message = ""),
+			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") }
+
+	)
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Vinyl> addVinyl(@RequestBody Vinyl vinyl) {
-		
+
 		vinylService.save(vinyl);
-		
+
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
