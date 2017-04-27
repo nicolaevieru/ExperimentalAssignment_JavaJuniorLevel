@@ -8,23 +8,34 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 
+import com.fortech.model.dto.VinylCreateDto;
+
 @Entity
 public class Vinyl {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
 	@SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_seq", allocationSize = 1)
-	Long id;
+	private Long id;
 
 	@Column(name = "name")
-	String name;
+	private String name;
 
 	@Column(name = "cost")
-	double cost;
+	private double cost;
 
 	@Column(name = "stock")
 	@Min(0)
-	int stock;
+	private int stock;
+
+	
+	
+	public Vinyl(VinylCreateDto vinylCreateDto) {
+		super();
+		this.name = vinylCreateDto.getName();
+		this.cost = vinylCreateDto.getCost();
+		this.stock = vinylCreateDto.getStock();
+	}
 
 	public Long getId() {
 		return id;

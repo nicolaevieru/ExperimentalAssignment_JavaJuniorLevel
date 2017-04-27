@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fortech.model.Vinyl;
+import com.fortech.model.dto.VinylCreateDto;
 import com.fortech.repository.VinylRepository;
 
 @RunWith(SpringRunner.class)
@@ -32,16 +33,16 @@ public class VinylServiceIT {
 	@Transactional
 	@Rollback(true)
 	public void testWhenVinylInfoIsOkCreateVinyl(){
-		Vinyl testVinyl = createTestVinyl("Pink Floyd",233.0,123);
+		VinylCreateDto testVinyl = createTestVinyl("Pink Floyd",233.0,123);
 						
-		ResponseEntity<Vinyl> responseEntity = restTemplate.postForEntity("/api/vinyls", testVinyl, Vinyl.class);
+		ResponseEntity<VinylCreateDto> responseEntity = restTemplate.postForEntity("/api/vinyls", testVinyl, VinylCreateDto.class);
 				
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		
 	}
 	
-	private Vinyl createTestVinyl(String name,double cost,int stock){
-		Vinyl testVinyl = new Vinyl();
+	private VinylCreateDto createTestVinyl(String name,double cost,int stock){
+		VinylCreateDto testVinyl = new VinylCreateDto();
 		
 		testVinyl.setName(name);
 		testVinyl.setCost(cost);
