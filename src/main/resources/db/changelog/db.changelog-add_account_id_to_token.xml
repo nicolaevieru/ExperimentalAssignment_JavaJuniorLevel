@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+	<changeSet author="dragos.slujeru" id="addAccountIDToToken">
+		<addColumn tableName="TOKEN">
+			<column name="ACCOUNT_ID" type="int" />
+		</addColumn>
+		<addForeignKeyConstraint baseColumnNames="ACCOUNT_ID"
+			baseTableName="TOKEN" constraintName="FK_TOKEN_ACCOUNT"
+			referencedColumnNames="id" referencedTableName="ACCOUNT" />
+	</changeSet>
+</databaseChangeLog>

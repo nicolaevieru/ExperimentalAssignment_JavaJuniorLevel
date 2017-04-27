@@ -7,5 +7,5 @@ import com.fortech.model.Account;
 
 @Repository("accountRepository")
 public interface AccountRepository extends CrudRepository<Account, Integer> {
-
+	Account findByEmail(String email);
 }
