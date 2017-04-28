@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 import com.fortech.model.dto.AccountCreateDto;
-import com.fortech.service.AccountListener;
+import com.fortech.service.listener.AccountListener;
 
 @Entity
 @EntityListeners(AccountListener.class)
