@@ -28,7 +28,7 @@ public class Account {
 	private String firstName;
 	private String lastName;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "type_id")
 	private AccountType accountType;
 	

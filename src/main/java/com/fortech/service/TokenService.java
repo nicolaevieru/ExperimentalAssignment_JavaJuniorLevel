@@ -7,4 +7,5 @@ public interface TokenService {
 	
 	Token save(AccountLoginDto toSave);
 	Token save(Token toSave);
+	Token findByHash(String token);
 }

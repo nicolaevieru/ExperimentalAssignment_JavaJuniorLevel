@@ -7,10 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fortech.model.Account;
 import com.fortech.model.AccountType;
 import com.fortech.model.dto.AccountCreateDto;
+import com.fortech.model.dto.AccountDeleteDto;
 import com.fortech.repository.AccountRepository;
 import com.fortech.repository.AccountTypeRepository;
 import com.fortech.service.exception.ForbiddenException;
 import com.fortech.service.validator.AccountValidator;
+import com.fortech.service.validator.DeleteValidator;
 import com.fortech.service.validator.Validator;
 
 @Service("accountService")
@@ -20,8 +22,11 @@ public class AccountServiceImpl implements AccountService {
 	AccountRepository accountRepository;
 	
 	@Autowired
+	DeleteValidator deleteValidator;
+
+	@Autowired
 	AccountTypeRepository accountTypeRepository;
-	
+
 	@Override
 	@Transactional
 	public Account save(Account account) {
@@ -33,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
 		if (accountType == null) {
 			accountType = accountTypeRepository.save(account.getAccountType());
 		}
-		
+
 		account.setAccountType(accountType);
 		return accountRepository.save(account);
 	}
@@ -51,6 +56,18 @@ public class AccountServiceImpl implements AccountService {
 		return save(account);
 	}
 
-	
+	@Override
+	public void delete(Integer id) {
+		
+		accountRepository.delete(id);
+	}
+
+	@Override
+	public void delete(Integer id, AccountDeleteDto credentials) {
+		deleteValidator.setIdToBeDeleted(idToBeDeleted);
+		deleteValidator.setToValidate(credentials);
+		deleteValidator.validate();
+		delete(id);
+	}
 
 }

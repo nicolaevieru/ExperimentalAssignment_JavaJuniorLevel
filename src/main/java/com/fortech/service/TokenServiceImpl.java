@@ -40,4 +40,10 @@ public class TokenServiceImpl implements TokenService {
 		}
 		return token;
 	}
+
+	@Override
+	public Token findByHash(String token) {
+		
+		return tokenRepository.findByHash(token);
+	}
 }
