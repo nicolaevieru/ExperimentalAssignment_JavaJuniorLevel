@@ -16,20 +16,18 @@ public class Vinyl {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
 	@SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_seq", allocationSize = 1)
-	private Long id;
+	private Integer id;
 
 	@Column(name = "name")
 	private String name;
 
 	@Column(name = "cost")
-	private double cost;
+	private double cost = 0.0;
 
 	@Column(name = "stock")
 	@Min(0)
-	private int stock;
+	private int stock = 0;
 
-	
-	
 	public Vinyl(VinylCreateDto vinylCreateDto) {
 		super();
 		this.name = vinylCreateDto.getName();
@@ -37,11 +35,11 @@ public class Vinyl {
 		this.stock = vinylCreateDto.getStock();
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -107,7 +105,5 @@ public class Vinyl {
 			return false;
 		return true;
 	}
-	
-	
 
 }

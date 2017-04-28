@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fortech.model.Token;
 import com.fortech.model.Vinyl;
+import com.fortech.model.dto.AddVinylToCartDto;
 import com.fortech.model.dto.VinylCreateDto;
 import com.fortech.service.VinylService;
 
@@ -44,13 +46,11 @@ public class VinylController {
 	}
 	
 	@RequestMapping(value = "{vinylId}/cart",method = RequestMethod.POST,consumes = "application/json")
-	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Long vinylId,@RequestBody Object object) {
-				
-		int quantity = Integer.parseInt((String)((Map)object).get("quantity"));
-		
-		vinylService.addVinylToCart(vinylId,quantity);
+	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Integer vinylId,@RequestBody Object requestBody) {
+						
+		vinylService.addVinylToCart(vinylId,requestBody);
 
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 	}	
 	

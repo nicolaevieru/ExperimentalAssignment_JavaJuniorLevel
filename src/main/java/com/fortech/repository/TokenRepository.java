@@ -7,5 +7,5 @@ import com.fortech.model.Token;
 
 @Repository("tokenRepository")
 public interface TokenRepository extends CrudRepository<Token, Integer> {
-
+	Token findByHash(String hash);
 }

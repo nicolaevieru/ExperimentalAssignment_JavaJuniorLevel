@@ -8,6 +8,6 @@ import com.fortech.model.Vinyl;
 import com.fortech.service.VinylService;
 
 @Repository("vinylRepository")
-public interface VinylRepository extends CrudRepository<Vinyl, Long> {
+public interface VinylRepository extends CrudRepository<Vinyl, Integer> {
 	
 }

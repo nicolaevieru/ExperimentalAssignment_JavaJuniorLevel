@@ -17,7 +17,7 @@ public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
 	@SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_seq", allocationSize = 1)
-	private Long id;
+	private Integer id;
 
 	@Column(name = "quantity")
 	private int quantity;
@@ -30,17 +30,18 @@ public class Item {
 	@JoinColumn(name = "vinyl_id")
 	private Vinyl vinyl;
 
-	public Item(Cart cart, Vinyl vinyl) {
+	public Item(int quantity, Cart cart, Vinyl vinyl) {
 		super();
+		this.quantity = quantity;
 		this.cart = cart;
 		this.vinyl = vinyl;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

@@ -2,36 +2,41 @@ package com.fortech.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
-@Entity
+@Entity(name = "CART_STATE")
 public class CartState {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
 	@SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_seq", allocationSize = 1)
-	private Long id;
+	private Integer id;
 
-	@Column(name = "state")
-	private String state;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type")
+	private CartStateEnum type;
 
-	public Long getId() {
+	
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public String getState() {
-		return state;
+	public CartStateEnum getType() {
+		return type;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setType(CartStateEnum type) {
+		this.type = type;
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.fortech.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +15,9 @@ public class Token {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HIBERNATE_SEQ")
 	@SequenceGenerator(name = "HIBERNATE_SEQ", sequenceName = "HIBERNATE_SEQ", allocationSize=1)
-	Integer id;
+	private Integer id;
 	
+	@Column(name = "HASH")
 	private String hash;
 	
 	@OneToOne

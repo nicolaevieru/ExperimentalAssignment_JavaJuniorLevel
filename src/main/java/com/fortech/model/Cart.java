@@ -15,46 +15,49 @@ import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Cart {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
 	@SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_seq", allocationSize = 1)
-	private Long id;
+	private Integer id;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "account_id")
-	private Cart cart;
-	
-	@Column(name = "cost")
-	double cost;
-	
-	@Column(name = "orderDate")
-	Date orderDate;
+	@JoinColumn(name = "ACCOUNTID")
+	private Account account;
+
+	@Column(name = "COST")
+	double cost = 0.0;
+
+	@Column(name="ORDERDATE")
+	private Date orderDate;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "state_id")
+	@JoinColumn(name = "STATEID")
 	private CartState cartState;
 
-	public Cart(Cart cart, CartState cartState) {
+	public Cart() {
+	}
+
+	public Cart(Account account, CartState cartState) {
 		super();
-		this.cart = cart;
+		this.account = account;
 		this.cartState = cartState;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public Cart getCart() {
-		return cart;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setCart(Cart cart) {
-		this.cart = cart;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public double getCost() {
@@ -80,8 +83,5 @@ public class Cart {
 	public void setCartState(CartState cartState) {
 		this.cartState = cartState;
 	}
-	
-	
-	
-	
+
 }
