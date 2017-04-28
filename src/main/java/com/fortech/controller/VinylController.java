@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiResponses;
 public class VinylController {
 
 	@Autowired
-	private VinylService vinylService;
+	private VinylService vinylServiceImpl;
 
 	@ApiOperation(value = "Create and store a vinyl in the database.")
 	@ApiResponses(value={
@@ -40,7 +40,7 @@ public class VinylController {
 		
 		Vinyl vinyl = new Vinyl(vinylCreateDto);
 		
-		vinylService.save(vinyl);
+		vinylServiceImpl.save(vinyl);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
@@ -48,7 +48,7 @@ public class VinylController {
 	@RequestMapping(value = "{vinylId}/cart",method = RequestMethod.POST,consumes = "application/json")
 	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Integer vinylId,@RequestBody Object requestBody) {
 						
-		vinylService.addVinylToCart(vinylId,requestBody);
+		vinylServiceImpl.addVinylToCart(vinylId,requestBody);
 
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 

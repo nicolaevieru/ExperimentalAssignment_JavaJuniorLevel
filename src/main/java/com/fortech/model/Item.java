@@ -19,15 +19,15 @@ public class Item {
 	@SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_seq", allocationSize = 1)
 	private Integer id;
 
-	@Column(name = "quantity")
+	@Column(name = "QUANTITY")
 	private int quantity;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "cart_id")
+	@JoinColumn(name = "CARTID")
 	private Cart cart;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "vinyl_id")
+	@JoinColumn(name = "VINYLID")
 	private Vinyl vinyl;
 
 	public Item(int quantity, Cart cart, Vinyl vinyl) {

@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.fortech.model.Vinyl;
-import com.fortech.service.VinylService;
+import com.fortech.service.VinylServiceImpl;
 
 @Repository("vinylRepository")
 public interface VinylRepository extends CrudRepository<Vinyl, Integer> {

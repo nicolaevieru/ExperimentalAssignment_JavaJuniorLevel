@@ -1,8 +1,5 @@
 package com.fortech.service;
 
-import javax.persistence.Query;
-
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,9 +60,7 @@ public class AccountServiceImpl implements AccountService {
 		accountValidator.validate();
 		
 		Account account = new Account(toSave);
-		
-		Account savedAccount = save(account);
-		
+		Account savedAccount = this.save(account);
 		Cart firstCart = createFirstCart(account);
 		
 		return savedAccount;
@@ -73,9 +68,7 @@ public class AccountServiceImpl implements AccountService {
 	
 	
 	private Cart createFirstCart(Account account){
-		
-		
-		CartState cartState;
+		CartState cartState;	
 		Cart firstCart = new Cart();
 		
 		cartState = cartStateRepository.findByType(CartStateEnum.ACTIV);

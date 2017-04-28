@@ -27,6 +27,9 @@ public class Vinyl {
 	@Column(name = "stock")
 	@Min(0)
 	private int stock = 0;
+	
+	public Vinyl() {
+	}
 
 	public Vinyl(VinylCreateDto vinylCreateDto) {
 		super();

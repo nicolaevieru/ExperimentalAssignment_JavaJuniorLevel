@@ -28,7 +28,4 @@ public class VinylCreateValidator extends Validator<Vinyl> {
 
 		}
 	}
-	
-	
-
 }
