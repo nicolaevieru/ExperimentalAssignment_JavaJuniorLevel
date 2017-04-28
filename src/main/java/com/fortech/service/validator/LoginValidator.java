@@ -1,10 +1,9 @@
 package com.fortech.service.validator;
 
-import javax.ws.rs.BadRequestException;
-
 import com.fortech.model.Account;
 import com.fortech.model.dto.AccountLoginDto;
 import com.fortech.service.encoder.PasswordEncoder;
+import com.fortech.service.exception.BadRequestException;
 
 public class LoginValidator extends Validator<AccountLoginDto> {
 	
@@ -16,6 +15,9 @@ public class LoginValidator extends Validator<AccountLoginDto> {
 	
 	@Override
 	public void validate() {
+		if (account == null) {
+			throw new BadRequestException("Invalid email or password");
+		}
 		validateEmail();
 		validatePassword();
 	}

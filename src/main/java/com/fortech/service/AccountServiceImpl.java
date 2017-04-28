@@ -17,6 +17,7 @@ import com.fortech.repository.AccountRepository;
 import com.fortech.repository.AccountTypeRepository;
 import com.fortech.repository.CartRepository;
 import com.fortech.repository.CartStateRepository;
+import com.fortech.service.exception.ForbiddenException;
 import com.fortech.service.validator.AccountValidator;
 import com.fortech.service.validator.Validator;
 
@@ -38,6 +39,9 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	@Transactional
 	public Account save(Account account) {
+		if (accountRepository.findByEmail(account.getEmail()) != null) {
+			throw new ForbiddenException("Email address already in use");
+		}
 		AccountType accountType;
 		accountType = accountTypeRepository.findByType(account.getAccountType().getType());
 		if (accountType == null) {
