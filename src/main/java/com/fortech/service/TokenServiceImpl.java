@@ -2,6 +2,7 @@ package com.fortech.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fortech.model.Token;
 import com.fortech.model.dto.AccountLoginDto;
@@ -23,15 +24,20 @@ public class TokenServiceImpl implements TokenService {
 	public Token save(AccountLoginDto emailAndPass) {
 		Token token = new Token();
 		token.setAccount(accountService.findByEmail(emailAndPass.getEmail()));
-		token.setHash(String.valueOf(emailAndPass.hashCode() + PRIME));
 		LoginValidator loginValidator = new LoginValidator(emailAndPass);
 		loginValidator.setAccount(token.getAccount());
 		loginValidator.validate();
+		token.setHash(String.valueOf(emailAndPass.hashCode() + PRIME));
 		return save(token);
 	}
 
 	@Override
+	@Transactional
 	public Token save(Token toSave) {
-		return tokenRepository.save(toSave);
+		Token token = tokenRepository.findByHash(toSave.getHash());
+		if (token == null) {
+			return tokenRepository.save(toSave);
+		}
+		return token;
 	}
 }
