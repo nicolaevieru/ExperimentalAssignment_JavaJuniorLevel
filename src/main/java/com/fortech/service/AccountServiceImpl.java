@@ -9,7 +9,7 @@ import com.fortech.model.AccountType;
 import com.fortech.model.dto.AccountCreateDto;
 import com.fortech.repository.AccountRepository;
 import com.fortech.repository.AccountTypeRepository;
-import com.fortech.service.exception.BadRequestException;
+import com.fortech.service.exception.ForbiddenException;
 import com.fortech.service.validator.AccountValidator;
 import com.fortech.service.validator.Validator;
 
@@ -26,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
 	@Transactional
 	public Account save(Account account) {
 		if (accountRepository.findByEmail(account.getEmail()) != null) {
-			throw new BadRequestException("Account already exists");
+			throw new ForbiddenException("Email address already in use");
 		}
 		AccountType accountType;
 		accountType = accountTypeRepository.findByType(account.getAccountType().getType());
