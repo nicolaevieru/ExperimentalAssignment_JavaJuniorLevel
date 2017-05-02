@@ -12,5 +12,8 @@ public interface AccountRepository extends CrudRepository<Account, Integer> {
 	Account findByEmail(String email);
 	
 	@Query("SELECT t.account FROM Token t LEFT JOIN t.account a WHERE t.hash = :token")
-	Account findAccountByToken(@Param("token") String token);
+	Account findByToken(@Param("token") String token);
+	
+	@Query("FROM Account a LEFT JOIN a.accountStatus accs WHERE (a.accountStatus.status != com.fortech.model.AccountStatusEnum.DELETED AND a.email = :email)")
+	Account findByEmailAndNotDeleted(@Param("email") String email);
 }

@@ -24,6 +24,9 @@
 			<column name="type_id" type="int">
 				<constraints references="ACCOUNT_TYPE(id)" foreignKeyName="ACCOUNT_TYPE_FK" nullable="false"/>
 			</column>
+			<column name="status_id" type="int">
+				<constraints references="ACCOUNT_STATUS(id)" foreignKeyName="ACCOUNT_STATUS_FK" nullable="false"/>
+			</column>
 		</createTable>
 	</changeSet>
 </databaseChangeLog>

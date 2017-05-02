@@ -27,7 +27,7 @@ public class TokenServiceImpl implements TokenService {
 		LoginValidator loginValidator = new LoginValidator(emailAndPass);
 		loginValidator.setAccount(token.getAccount());
 		loginValidator.validate();
-		token.setHash(String.valueOf(emailAndPass.hashCode() + PRIME));
+		token.setHash(String.valueOf(Math.abs(emailAndPass.hashCode() + PRIME)));
 		return save(token);
 	}
 
@@ -45,5 +45,12 @@ public class TokenServiceImpl implements TokenService {
 	public Token findByHash(String token) {
 		
 		return tokenRepository.findByHash(token);
+	}
+	
+
+	@Override
+	public void delete(Integer id) {
+		tokenRepository.delete(id);
+		
 	}
 }
