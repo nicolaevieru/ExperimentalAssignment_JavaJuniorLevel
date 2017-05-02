@@ -58,7 +58,8 @@ public class VinylServiceImpl implements VinylService {
 
 		Cart cart = findUserActiveCart(vinylToCartDto);		
 		Vinyl vinyl = vinylRepository.findOne(vinylId);		
-		Item item = new Item(vinylToCartDto.getQuantity(),cart,vinyl);		
+		Item item = new Item(vinylToCartDto.getQuantity(),cart,vinyl);	
+		
 		itemRepository.save(item);
 		
 		updateVinylInfo(vinylRepository.findOne(vinylId), item.getQuantity());

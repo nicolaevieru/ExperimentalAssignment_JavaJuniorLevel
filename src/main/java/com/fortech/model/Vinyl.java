@@ -1,6 +1,7 @@
 package com.fortech.model;
 
 import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +10,7 @@ import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 
 import com.fortech.model.dto.VinylCreateDto;
+
 
 @Entity
 public class Vinyl {
@@ -31,11 +33,11 @@ public class Vinyl {
 	public Vinyl() {
 	}
 
-	public Vinyl(VinylCreateDto vinylCreateDto) {
+	public Vinyl(VinylCreateDto vinyl) {
 		super();
-		this.name = vinylCreateDto.getName();
-		this.cost = vinylCreateDto.getCost();
-		this.stock = vinylCreateDto.getStock();
+		this.name = vinyl.getName();
+		this.cost = vinyl.getCost();
+		this.stock = vinyl.getStock();
 	}
 
 	public Integer getId() {

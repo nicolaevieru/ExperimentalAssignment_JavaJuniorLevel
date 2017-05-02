@@ -9,6 +9,8 @@ public class AddVinylToCartDto {
 	private int quantity;
 
 	private Token token;
+	
+	public AddVinylToCartDto(){}
 
 	public AddVinylToCartDto(Integer vinylId, int quantity, Token token) {
 		super();
