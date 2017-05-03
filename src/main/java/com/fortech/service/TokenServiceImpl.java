@@ -53,4 +53,15 @@ public class TokenServiceImpl implements TokenService {
 		tokenRepository.delete(id);
 		
 	}
+
+	@Override
+	public Token findByAccountId(Integer id) {
+		return tokenRepository.findByAccountId(id);
+	}
+
+	@Override
+	public void deleteAll() {
+		tokenRepository.deleteAll();
+		
+	}
 }

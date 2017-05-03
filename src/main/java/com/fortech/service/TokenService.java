@@ -8,5 +8,7 @@ public interface TokenService {
 	Token save(AccountLoginDto toSave);
 	Token save(Token toSave);
 	Token findByHash(String token);
+	Token findByAccountId(Integer id);
 	void delete(Integer id);
+	void deleteAll();
 }
