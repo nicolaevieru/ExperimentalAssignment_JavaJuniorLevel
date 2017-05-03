@@ -15,69 +15,94 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fortech.model.dto.AccountCreateDto;
+import com.fortech.model.dto.AccountLoginDto;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource(locations="classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class AccountControllerTests {
-	
+
 	private static final String URL = "http://localhost:9000/api/users";
-	private ResponseEntity<AccountCreateDto> response;
-	private static AccountCreateDto testAccount;
-	
+
+	private AccountCreateDto testAccount;
+	private AccountLoginDto testLogin;
+
 	@Autowired
-    private TestRestTemplate restTemplate;
-	
-	
+	private TestRestTemplate restTemplate;
+
 	@Test
 	public void testPostWithValidDataReturnsCreated() {
-		
-		testAccount = createAccount("John", "Doe","johndoe@example.com","Pas$wo5rdaaaa");
-		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDto.class);
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		
+
+		assertEquals(HttpStatus.CREATED, sendRequest().getStatusCode());
 	}
+
 	@Test
 	public void testPostWithInvalidEmailReturns400() {
-		
-		testAccount = createAccount("John", "Doe","johndoesexample.com","Pas$wo5rdaaaa");
-		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDto.class);
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		
+
+		testAccount.setEmail("emailwithnoat");
+		assertEquals(HttpStatus.BAD_REQUEST, sendRequest().getStatusCode());
 	}
-	
+
 	@Test
 	public void testPostWithInvalidPasswordlReturns400() {
-		
-		testAccount = createAccount("John", "Doe","johndoe@example.com","password");
-		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDto.class);
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		
+
+		testAccount.setPassword("password");
+		assertEquals(HttpStatus.BAD_REQUEST, sendRequest().getStatusCode());
 	}
-	
+
 	@Test
 	public void testPostWithInvalidNameReturns400() {
-		
-		testAccount = createAccount("John", "D","johndoe@example.com","Pas$wo5rdaaaa");
-		response = restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDto.class);
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		
+
+		testAccount.setFirstName("J");
+		assertEquals(HttpStatus.BAD_REQUEST, sendRequest().getStatusCode());
 	}
-	
-	
+
+	@Test
+	public void testLoginWithValidCredentialsReturns200() {
+		AccountCreateDto testAccountForLogin = createAccount("Ass", "asas", "johndoelogin@example.com",
+				"Pas$word4login");
+		restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccountForLogin, AccountCreateDto.class);
+		assertEquals(HttpStatus.OK, sendRequest("/login").getStatusCode());
+	}
+
+	@Test
+	public void testLoginWithInvalidPasswordReturns400() {
+		testLogin.setPassword("notThePassword");
+		assertEquals(HttpStatus.BAD_REQUEST, sendRequest("/login").getStatusCode());
+	}
+
+	@Test
+	public void testLoginWithInvalidEmailReturns400() {
+		testLogin.setEmail("notTheEmail");
+		assertEquals(HttpStatus.BAD_REQUEST, sendRequest("/login").getStatusCode());
+	}
+
 	public static AccountCreateDto createAccount(String firstName, String lastName, String email, String password) {
+
 		AccountCreateDto testAccount = new AccountCreateDto();
 		testAccount.setFirstName(firstName);
 		testAccount.setLastName(lastName);
 		testAccount.setEmail(email);
 		testAccount.setPassword(password);
 		return testAccount;
-		
 	}
-	
+
+	private ResponseEntity<AccountLoginDto> sendRequest(String url) {
+		return restTemplate.withBasicAuth("admin", "secret").postForEntity(URL + url, testLogin, AccountLoginDto.class);
+	}
+
+	private ResponseEntity<AccountCreateDto> sendRequest() {
+
+		return restTemplate.withBasicAuth("admin", "secret").postForEntity(URL, testAccount, AccountCreateDto.class);
+	}
+
 	@Before
-	public void resetAccount() {
-		testAccount = new AccountCreateDto();
+	public void resetData() {
+		testLogin = new AccountLoginDto();
+		testLogin.setEmail("johndoelogin@example.com");
+		testLogin.setPassword("Pas$word4login");
+		testAccount = createAccount("John", "Doe", "johndoe@example.com", "Pas$wo5rdaaaa");
+
 	}
 
 }

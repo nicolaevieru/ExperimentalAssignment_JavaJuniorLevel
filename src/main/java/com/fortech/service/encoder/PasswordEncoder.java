@@ -3,8 +3,9 @@ package com.fortech.service.encoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 public class PasswordEncoder {
+	private static final String KEY = "secret";
 	
-	private StandardPasswordEncoder encoder;
+	private StandardPasswordEncoder encoder = new StandardPasswordEncoder(KEY);
 	private String rawPassword;
 	
 	public PasswordEncoder() {
@@ -17,7 +18,6 @@ public class PasswordEncoder {
 	
 	
 	public String encodePassword() {
-		this.encoder = new StandardPasswordEncoder("secret");
 		return encoder.encode(rawPassword);
 	}
 

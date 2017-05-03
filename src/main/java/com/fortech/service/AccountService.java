@@ -1,9 +1,12 @@
 package com.fortech.service;
 
 import com.fortech.model.Account;
+import com.fortech.model.dto.AccountCreateDto;
 
 public interface AccountService {
 	
-	public Account save(Account a);
+	Account save(Account toSave);
+	Account save(AccountCreateDto toSave);
+	Account findByEmail(String email);
 
 }
