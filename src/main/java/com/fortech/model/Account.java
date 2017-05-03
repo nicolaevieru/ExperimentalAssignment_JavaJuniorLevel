@@ -27,8 +27,19 @@ public class Account {
 	private String email;
 	private String firstName;
 	private String lastName;
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "status_id")
+	private AccountStatus accountStatus;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	public AccountStatus getAccountStatus() {
+		return accountStatus;
+	}
+
+	public void setAccountStatus(AccountStatus accountStatus) {
+		this.accountStatus = accountStatus;
+	}
+
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "type_id")
 	private AccountType accountType;
 	
@@ -41,6 +52,7 @@ public class Account {
 		this.email = toCopy.getEmail();
 		this.passwordHash = toCopy.getPassword();
 		this.accountType = new AccountType(AccountTypeEnum.CUSTOMER);
+		this.accountStatus = new AccountStatus(AccountStatusEnum.ACTIVE);
 	}
 
 	@Override

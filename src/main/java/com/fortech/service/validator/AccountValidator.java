@@ -4,9 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.fortech.model.dto.AccountCreateDto;
-import com.fortech.service.exception.InvalidEmailException;
-import com.fortech.service.exception.InvalidNameException;
-import com.fortech.service.exception.InvalidPasswordException;
+import com.fortech.service.exception.BadRequestException;
 
 public class AccountValidator extends Validator<AccountCreateDto> {
 	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
@@ -27,20 +25,20 @@ public class AccountValidator extends Validator<AccountCreateDto> {
 	private void validateEmail() {
 		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(toValidate.getEmail());
 		if(!matcher.find()) {
-			throw new InvalidEmailException();
+			throw new BadRequestException("The email address is invalid");
 		}
 	}
 	
 	private void validatePassword() {
 		Matcher matcher = VALID_PASSWORD_REGEX.matcher(toValidate.getPassword());
 		if(!matcher.find()) {
-			throw new InvalidPasswordException();
+			throw new BadRequestException("The password is invalid, it must contain 1 upercase letter, 1 special character, 1 digit and at it must be at least 6 characters long");
 		}
 	}
 	
 	private void validateNames() {
 		if (toValidate.getFirstName() == null || toValidate.getLastName() == null || toValidate.getFirstName().length() <= 1 || toValidate.getLastName().length() <= 1)
-			throw new InvalidNameException();
+			throw new BadRequestException("The names must have more than 1 character");
 	}
 }
 

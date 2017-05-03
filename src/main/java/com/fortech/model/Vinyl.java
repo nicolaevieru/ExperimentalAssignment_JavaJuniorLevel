@@ -1,6 +1,7 @@
 package com.fortech.model;
 
 import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,29 +9,42 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 
+import com.fortech.model.dto.VinylCreateDto;
+
+
 @Entity
 public class Vinyl {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
 	@SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_seq", allocationSize = 1)
-	Long id;
+	private Integer id;
 
 	@Column(name = "name")
-	String name;
+	private String name;
 
 	@Column(name = "cost")
-	double cost;
+	private double cost = 0.0;
 
 	@Column(name = "stock")
 	@Min(0)
-	int stock;
+	private int stock = 0;
+	
+	public Vinyl() {
+	}
 
-	public Long getId() {
+	public Vinyl(VinylCreateDto vinyl) {
+		super();
+		this.name = vinyl.getName();
+		this.cost = vinyl.getCost();
+		this.stock = vinyl.getStock();
+	}
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -96,7 +110,5 @@ public class Vinyl {
 			return false;
 		return true;
 	}
-	
-	
 
 }
