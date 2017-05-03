@@ -1,7 +1,5 @@
 package com.fortech.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fortech.model.Token;
 import com.fortech.model.Vinyl;
-import com.fortech.model.dto.AddVinylToCartDto;
 import com.fortech.model.dto.VinylCreateDto;
 import com.fortech.service.VinylService;
 
@@ -38,11 +34,10 @@ public class VinylController {
 	@RequestMapping(method = RequestMethod.POST,consumes = "application/json")
 	public ResponseEntity<Vinyl> createVinyl(@RequestBody VinylCreateDto vinylCreateDto) {
 		
-		Vinyl vinyl = new Vinyl(vinylCreateDto);
-		
-		vinylServiceImpl.save(vinyl);
+		vinylServiceImpl.save(vinylCreateDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
+		
 	}
 	
 	@RequestMapping(value = "{vinylId}/cart",method = RequestMethod.POST,consumes = "application/json")

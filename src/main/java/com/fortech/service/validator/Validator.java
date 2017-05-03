@@ -12,7 +12,7 @@ public abstract class Validator<T> {
 
 	public abstract void validate();
 	
-	public void setValue(T value) {
+	public void setToValidate(T value) {
 		toValidate = value;
 	}
 

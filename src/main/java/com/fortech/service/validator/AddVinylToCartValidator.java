@@ -3,10 +3,13 @@ package com.fortech.service.validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fortech.model.AccountTypeEnum;
 import com.fortech.model.dto.AddVinylToCartDto;
+import com.fortech.repository.AccountTypeRepository;
 import com.fortech.repository.TokenRepository;
 import com.fortech.repository.VinylRepository;
 import com.fortech.service.exception.BadRequestException;
+import com.fortech.service.exception.UnauthorizedException;
 
 @Component
 public class AddVinylToCartValidator extends Validator<AddVinylToCartDto> {
@@ -20,9 +23,6 @@ public class AddVinylToCartValidator extends Validator<AddVinylToCartDto> {
 
 	@Autowired
 	private VinylRepository vinylRepository;
-
-	@Autowired
-	private TokenRepository tokenRepository;
 
 	@Override
 	public void validate() {

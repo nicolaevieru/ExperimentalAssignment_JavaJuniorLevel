@@ -1,10 +1,13 @@
 package com.fortech.model.dto;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Min;
+import com.fortech.model.Token;
 
 public class VinylCreateDto {
 
+	private Token tokenObject;
+	
+	private String token;
+	
 	private String name;
 
 	private double cost;
@@ -33,6 +36,22 @@ public class VinylCreateDto {
 
 	public void setStock(int stock) {
 		this.stock = stock;
+	}
+
+	public Token getTokenObject() {
+		return tokenObject;
+	}
+
+	public void setTokenObject(Token tokenObject) {
+		this.tokenObject = tokenObject;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 }

@@ -2,7 +2,6 @@ package com.fortech.service;
 
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +10,12 @@ import com.fortech.model.Item;
 import com.fortech.model.Token;
 import com.fortech.model.Vinyl;
 import com.fortech.model.dto.AddVinylToCartDto;
+import com.fortech.model.dto.VinylCreateDto;
 import com.fortech.repository.CartRepository;
 import com.fortech.repository.ItemRepository;
 import com.fortech.repository.TokenRepository;
 import com.fortech.repository.VinylRepository;
 import com.fortech.service.validator.AddVinylToCartValidator;
-import com.fortech.service.validator.Validator;
 import com.fortech.service.validator.VinylCreateValidator;;
 
 @Service("vinylService")
@@ -37,12 +36,18 @@ public class VinylServiceImpl implements VinylService {
 	@Autowired
 	private AddVinylToCartValidator vinylToCartValidator;
 	
+	@Autowired
+	private VinylCreateValidator vinylCreateValidator;
+	
 
 	@Override
-	public Vinyl save(Vinyl vinyl) {
-		Validator<Vinyl> validator = new VinylCreateValidator(vinyl);
+	public Vinyl save(VinylCreateDto vinylCreateDto) {		
+		Vinyl vinyl = new Vinyl(vinylCreateDto);
 		
-		validator.validate();
+		vinylCreateDto.setTokenObject(tokenRepository.findByHash(vinylCreateDto.getToken()));
+		
+		vinylCreateValidator.setToValidate(vinylCreateDto);		
+		vinylCreateValidator.validate();
 		
 		return vinylRepository.save(vinyl);
 	}
@@ -53,7 +58,7 @@ public class VinylServiceImpl implements VinylService {
 
 		AddVinylToCartDto vinylToCartDto = processRequestBody(vinylId,requestBody);
 		
-		vinylToCartValidator.setValue(vinylToCartDto);
+		vinylToCartValidator.setToValidate(vinylToCartDto);
 		vinylToCartValidator.validate();
 
 		Cart cart = findUserActiveCart(vinylToCartDto);		
