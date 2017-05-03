@@ -5,8 +5,8 @@ import com.fortech.model.dto.AccountCreateDto;
 
 public interface AccountService {
 	
-	public Account save(Account toSave);
-	public Account save(AccountCreateDto toSave);
-	public Account findByEmail(String email);
+	Account save(Account toSave);
+	Account save(AccountCreateDto toSave);
+	Account findByEmail(String email);
 
 }
