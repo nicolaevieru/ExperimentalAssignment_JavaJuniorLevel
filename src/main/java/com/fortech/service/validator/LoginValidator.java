@@ -39,5 +39,9 @@ public class LoginValidator extends Validator<AccountLoginDto> {
 	public void setAccount(Account account) {
 		this.account = account;
 	}
+	
+	public Account getAccount() {
+		return this.account;
+	}
 
 }

@@ -2,7 +2,9 @@ package com.fortech.service.validator;
 
 public abstract class Validator<T> {
 	protected T toValidate;
-	
+
+	public abstract void validate();
+
 	public Validator() {
 	}
 
@@ -10,10 +12,11 @@ public abstract class Validator<T> {
 		this.toValidate = toValidate;
 	}
 
-	public abstract void validate();
-	
-	public void setToValidate(T value) {
-		toValidate = value;
+	public void setToValidate(T toValidate) {
+		this.toValidate = toValidate;
 	}
 
+	public T getToValidate() {
+		return toValidate;
+	}
 }
