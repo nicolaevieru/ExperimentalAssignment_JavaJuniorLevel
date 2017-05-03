@@ -29,6 +29,8 @@ public class Item {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "VINYLID")
 	private Vinyl vinyl;
+	
+	public Item(){}
 
 	public Item(int quantity, Cart cart, Vinyl vinyl) {
 		super();

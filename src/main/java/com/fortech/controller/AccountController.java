@@ -6,10 +6,12 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fortech.model.dto.AccountCreateDto;
 import com.fortech.model.dto.AccountDeleteDto;
 import com.fortech.model.dto.AccountLoginDto;
+import com.fortech.model.dto.CartDetailsDto;
 import com.fortech.service.AccountService;
 import com.fortech.service.TokenService;
 
@@ -63,9 +66,28 @@ public class AccountController {
 	public ResponseEntity<AccountDeleteDto> deleteAccount(@PathVariable("id") Integer id,
 			@RequestBody AccountDeleteDto credentials) {
 		accountService.delete(id, credentials);
+		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-	
-	
 
+	
+	@RequestMapping(value = "users/{userId}/cart",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<CartDetailsDto> getCartDetails(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader){
+		
+		CartDetailsDto cartDetailsResponse = accountService.getCartDetails(userId,requestHeader);
+		
+		return new ResponseEntity<>(cartDetailsResponse,HttpStatus.OK);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

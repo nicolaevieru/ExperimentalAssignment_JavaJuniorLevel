@@ -1,9 +1,14 @@
 package com.fortech.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+
 import com.fortech.model.Account;
 import com.fortech.model.AccountStatus;
 import com.fortech.model.AccountStatusEnum;
@@ -11,16 +16,21 @@ import com.fortech.model.AccountType;
 import com.fortech.model.Cart;
 import com.fortech.model.CartState;
 import com.fortech.model.CartStateEnum;
+import com.fortech.model.Item;
 import com.fortech.model.Token;
 import com.fortech.model.dto.AccountCreateDto;
 import com.fortech.model.dto.AccountDeleteDto;
+import com.fortech.model.dto.CartDetailsDto;
+import com.fortech.model.dto.ItemDto;
 import com.fortech.repository.AccountRepository;
 import com.fortech.repository.AccountStatusRepository;
 import com.fortech.repository.AccountTypeRepository;
 import com.fortech.repository.CartRepository;
 import com.fortech.repository.CartStateRepository;
+import com.fortech.repository.ItemRepository;
 import com.fortech.service.exception.ForbiddenException;
 import com.fortech.service.validator.AccountValidator;
+import com.fortech.service.validator.CartDetailsValidator;
 import com.fortech.service.validator.DeleteValidator;
 import com.fortech.service.validator.Validator;
 
@@ -30,35 +40,41 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	AccountRepository accountRepository;
-	
+
 	@Autowired
 	AccountTypeRepository accountTypeRepository;
-	
+
 	@Autowired
 	CartRepository cartRepository;
-	
+
 	@Autowired
 	CartStateRepository cartStateRepository;
-	
+
 	@Autowired
 	AccountStatusRepository accountStatusRepository;
-	
+
+	@Autowired
+	ItemRepository itemRepository;
+
 	@Autowired
 	DeleteValidator deleteValidator;
-	
+
+	@Autowired
+	CartDetailsValidator cartDetailsValidator;
+
 	@Autowired
 	TokenService tokenService;
-	
+
 	@Override
 	public Account save(Account account) {
 		Account existingAccount = accountRepository.findByEmail(account.getEmail());
 		if (existingAccount != null && existingAccount.getAccountStatus().getStatus() != AccountStatusEnum.DELETED) {
-			if ( existingAccount.getAccountStatus().getStatus() != AccountStatusEnum.DELETED) {
+			if (existingAccount.getAccountStatus().getStatus() != AccountStatusEnum.DELETED) {
 				throw new ForbiddenException("Email address already in use");
 			} else {
 				existingAccount.setAccountStatus(accountStatusRepository.findByStatus(AccountStatusEnum.ACTIVE));
 				return accountRepository.save(account);
-			}	
+			}
 		}
 		AccountStatus accountStatus;
 		AccountType accountType;
@@ -85,33 +101,32 @@ public class AccountServiceImpl implements AccountService {
 	public Account save(AccountCreateDto toSave) {
 		Validator<AccountCreateDto> accountValidator = new AccountValidator(toSave);
 		accountValidator.validate();
-		
+
 		Account account = new Account(toSave);
 		Account savedAccount = this.save(account);
 		Cart firstCart = createFirstCart(account);
-		
+
 		return savedAccount;
 	}
-	
-	
-	private Cart createFirstCart(Account account){
-		CartState cartState;	
+
+	private Cart createFirstCart(Account account) {
+		CartState cartState;
 		Cart firstCart = new Cart();
-		
+
 		cartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
-				
+
 		firstCart.setAccount(account);
 		firstCart.setCartState(cartState);
-		
+
 		return cartRepository.save(firstCart);
-		
+
 	}
 
 	@Override
 	public void delete(Integer id) {
 		Account deletedAccount = accountRepository.findOne(id);
 		AccountStatus deleteStatus = accountStatusRepository.findByStatus(AccountStatusEnum.DELETED);
-		if (deleteStatus == null ) {
+		if (deleteStatus == null) {
 			deleteStatus = accountStatusRepository.save(new AccountStatus(AccountStatusEnum.DELETED));
 		}
 		deletedAccount.setAccountStatus(deleteStatus);
@@ -126,6 +141,45 @@ public class AccountServiceImpl implements AccountService {
 		Token token = tokenService.findByHash(credentials.getToken());
 		tokenService.delete(token.getId());
 		delete(id);
+	}
+
+	@Override
+	public CartDetailsDto getCartDetails(Integer userId, HttpHeaders requestHeader) {
+
+		Token token = tokenService.findByHash(requestHeader.getFirst("token"));
+
+		cartDetailsValidator.setToValidate(token);
+		cartDetailsValidator.setUserId(userId);
+		cartDetailsValidator.validate();
+
+		return createCartDetails(userId);
+	}
+
+	private CartDetailsDto createCartDetails(Integer userId) {
+		List<Item> itemList = new ArrayList<>();
+		List<ItemDto> itemsDetails = new ArrayList<>();
+		CartDetailsDto cartDetailsResponse = new CartDetailsDto();
+
+		Account userAccount = accountRepository.findOne(userId);
+		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+		Cart activeCart = cartRepository.findByAccountAndCartState(userAccount, activeCartState);
+
+		itemList = (List<Item>) itemRepository.findByCart(activeCart);
+
+		for (Item item : itemList) {
+			String name = item.getVinyl().getName();
+			Integer quantity = item.getQuantity();
+			Double cost = item.getVinyl().getCost();
+			
+			itemsDetails.add(new ItemDto(name, quantity, cost));
+		}
+		
+		cartDetailsResponse.setNumberOfItems(itemList.size());
+		cartDetailsResponse.setTotalCost(activeCart.getCost());
+		cartDetailsResponse.setItems(itemsDetails);
+		
+		return cartDetailsResponse;
+
 	}
 
 	@Override
