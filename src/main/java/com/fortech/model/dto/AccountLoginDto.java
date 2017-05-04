@@ -5,6 +5,15 @@ public class AccountLoginDto {
 	private String email;
 	private String password;
 	
+	public AccountLoginDto(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+	
+	public AccountLoginDto() {
+		
+	}
+	
 	public String getEmail() {
 		return email;
 	}

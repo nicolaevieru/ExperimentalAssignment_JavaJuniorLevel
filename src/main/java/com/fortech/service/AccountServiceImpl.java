@@ -1,9 +1,12 @@
 package com.fortech.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.fortech.model.Account;
 import com.fortech.model.AccountStatus;
 import com.fortech.model.AccountStatusEnum;
@@ -14,6 +17,8 @@ import com.fortech.model.CartStateEnum;
 import com.fortech.model.Token;
 import com.fortech.model.dto.AccountCreateDto;
 import com.fortech.model.dto.AccountDeleteDto;
+import com.fortech.model.dto.CustomerDto;
+import com.fortech.model.dto.CustomerListDto;
 import com.fortech.repository.AccountRepository;
 import com.fortech.repository.AccountStatusRepository;
 import com.fortech.repository.AccountTypeRepository;
@@ -22,6 +27,7 @@ import com.fortech.repository.CartStateRepository;
 import com.fortech.service.exception.ForbiddenException;
 import com.fortech.service.validator.AccountValidator;
 import com.fortech.service.validator.DeleteValidator;
+import com.fortech.service.validator.IsManagerValidator;
 import com.fortech.service.validator.Validator;
 
 @Service("accountService")
@@ -131,6 +137,20 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account findOne(Integer id) {
 		return accountRepository.findOne(id);
+	}
+
+	@Override
+	public CustomerListDto getCustomers(Token token) {
+		Validator<Token> validator = new IsManagerValidator(token);
+		validator.validate();
+		List<CustomerDto> customers = accountRepository.getCustomers();
+		return new CustomerListDto(customers);
+	}
+
+	@Override
+	public void deleteAll() {
+		accountRepository.deleteAll();
+		
 	}
 
 }
