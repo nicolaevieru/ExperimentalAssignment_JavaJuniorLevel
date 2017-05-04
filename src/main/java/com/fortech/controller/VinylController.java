@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fortech.model.Vinyl;
+import com.fortech.model.dto.VinylCanOrderListDto;
 import com.fortech.model.dto.VinylCreateDto;
 import com.fortech.model.dto.VinylInventoryListDto;
 import com.fortech.service.TokenService;
@@ -60,6 +61,13 @@ public class VinylController {
 
 		return new ResponseEntity<>(vinylService.getInventory(tokenService.findByHash(header.getFirst("token"))),
 				HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
+	public ResponseEntity<VinylCanOrderListDto> getVinyls(@RequestHeader HttpHeaders header) {
+
+		return new ResponseEntity<>(vinylService.getVinyls(), HttpStatus.OK);
+
 	}
 
 }

@@ -10,6 +10,7 @@ import com.fortech.model.Item;
 import com.fortech.model.Token;
 import com.fortech.model.Vinyl;
 import com.fortech.model.dto.AddVinylToCartDto;
+import com.fortech.model.dto.VinylCanOrderListDto;
 import com.fortech.model.dto.VinylCreateDto;
 import com.fortech.model.dto.VinylInventoryListDto;
 import com.fortech.repository.CartRepository;
@@ -93,6 +94,11 @@ public class VinylServiceImpl implements VinylService {
 		IsManagerValidator validator = new IsManagerValidator(token);
 		validator.validate();
 		return new VinylInventoryListDto(vinylRepository.getInventory());
+	}
+
+	@Override
+	public VinylCanOrderListDto getVinyls() {
+		return new VinylCanOrderListDto(vinylRepository.getVinyls());
 	}
 
 }
