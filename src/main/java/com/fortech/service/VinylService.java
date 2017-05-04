@@ -16,4 +16,6 @@ public interface VinylService {
 	
 	VinylCanOrderListDto getVinyls();
 
+	void deleteVinyl(Integer id, String token);
+
 }

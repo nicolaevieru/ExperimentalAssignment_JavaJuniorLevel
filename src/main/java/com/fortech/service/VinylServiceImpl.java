@@ -17,8 +17,10 @@ import com.fortech.repository.CartRepository;
 import com.fortech.repository.ItemRepository;
 import com.fortech.repository.TokenRepository;
 import com.fortech.repository.VinylRepository;
+import com.fortech.service.exception.NotFoundException;
 import com.fortech.service.validator.AddVinylToCartValidator;
 import com.fortech.service.validator.IsManagerValidator;
+import com.fortech.service.validator.Validator;
 import com.fortech.service.validator.VinylCreateValidator;;
 
 @Service("vinylService")
@@ -99,6 +101,18 @@ public class VinylServiceImpl implements VinylService {
 	@Override
 	public VinylCanOrderListDto getVinyls() {
 		return new VinylCanOrderListDto(vinylRepository.getVinyls());
+	}
+
+	@Override
+	public void deleteVinyl(Integer id, String token) {
+		Validator<Token> validator = new IsManagerValidator(tokenRepository.findByHash(token));
+		validator.validate();
+		Vinyl toBeDeleted = vinylRepository.findOne(id);
+		if (toBeDeleted == null) {
+			throw new NotFoundException("Vinyl not Found");
+		}
+		toBeDeleted.setAvailable(false);
+		vinylRepository.save(toBeDeleted);
 	}
 
 }

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fortech.model.dto.ChangeOrderStatusDto;
@@ -36,7 +35,6 @@ public class CartController {
 	}
 
 	@ExceptionHandler({ HttpMessageNotReadableException.class })
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public void handleBadRequests(HttpServletResponse response) throws IOException{
 		response.sendError(HttpStatus.BAD_REQUEST.value(), "Invalid order state or token");
 	}

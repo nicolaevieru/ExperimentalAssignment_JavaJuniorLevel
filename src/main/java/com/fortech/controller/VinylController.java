@@ -1,5 +1,7 @@
 package com.fortech.controller;
 
+import java.util.Map;
+
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,13 @@ public class VinylController {
 	public ResponseEntity<VinylCanOrderListDto> getVinyls(@RequestHeader HttpHeaders header) {
 
 		return new ResponseEntity<>(vinylService.getVinyls(), HttpStatus.OK);
+
+	}
+	
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<VinylCanOrderListDto> deleteVinyl(@RequestBody Map<String, String> request, @PathVariable("id") Integer id ) {
+		vinylService.deleteVinyl(id, request.get("token"));
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 	}
 
