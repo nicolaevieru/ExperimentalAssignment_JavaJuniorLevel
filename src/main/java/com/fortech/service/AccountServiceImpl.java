@@ -64,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	CartDetailsValidator cartDetailsValidator;
-	
+
 	@Autowired
 	OrdersValidator ordersValidator;
 
@@ -110,12 +110,12 @@ public class AccountServiceImpl implements AccountService {
 
 		Account account = new Account(toSave);
 		Account savedAccount = this.save(account);
-		Cart firstCart = createFirstCart(account);
+		Cart firstCart = createOpenCart(account);
 
 		return savedAccount;
 	}
 
-	private Cart createFirstCart(Account account) {
+	private Cart createOpenCart(Account account) {
 		CartState cartState;
 		Cart firstCart = new Cart();
 
@@ -171,10 +171,9 @@ public class AccountServiceImpl implements AccountService {
 		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
 		Cart activeCart = cartRepository.findByAccountAndCartState(userAccount, activeCartState);
 
-		
-		if((itemsDetailsQueryResponse = itemRepository.findByCart(activeCart)).getClass() == Cart.class){
-			itemList.add((Item) itemsDetailsQueryResponse); 
-		} else if(itemsDetailsQueryResponse.getClass() == List.class){
+		if ((itemsDetailsQueryResponse = itemRepository.findByCart(activeCart)).getClass() == Cart.class) {
+			itemList.add((Item) itemsDetailsQueryResponse);
+		} else if (itemsDetailsQueryResponse.getClass() == List.class) {
 			itemList = (List<Item>) itemsDetailsQueryResponse;
 		}
 
@@ -207,10 +206,10 @@ public class AccountServiceImpl implements AccountService {
 		ordersValidator.validate();
 
 		Account customerAccount = accountRepository.findOne(userId);
-		
-		if((customerQueryCartsResponse = cartRepository.findByAccount(customerAccount)).getClass() == Cart.class){
-			customerCarts.add((Cart)customerQueryCartsResponse); 
-		} else if(customerQueryCartsResponse.getClass() == List.class){
+
+		if ((customerQueryCartsResponse = cartRepository.findByAccount(customerAccount)).getClass() == Cart.class) {
+			customerCarts.add((Cart) customerQueryCartsResponse);
+		} else if (customerQueryCartsResponse.getClass() == List.class) {
 			customerCarts = (List<Cart>) customerQueryCartsResponse;
 		}
 
@@ -223,6 +222,28 @@ public class AccountServiceImpl implements AccountService {
 		}
 
 		return allCustomerOrders;
+	}
+
+	@Override
+	public void placeOrder(Integer userId, HttpHeaders requestHeader) {
+		Token token = tokenService.findByHash(requestHeader.getFirst("token"));
+
+		ordersValidator.setToValidate(token);
+		ordersValidator.setUserId(userId);
+		ordersValidator.validate();
+
+		CartState processingCartState = cartStateRepository.findByType(CartStateEnum.PROCESSING);
+		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+
+		Cart activeCart = findCustomerActiveCart(token, activeCartState);
+		activeCart.setCartState(processingCartState);
+		activeCart.setOrderDate(new Date());
+
+		this.createOpenCart(token.getAccount());
+	}
+
+	private Cart findCustomerActiveCart(Token token, CartState activeCartState) {
+		return cartRepository.findByAccountAndCartState(token.getAccount(),activeCartState);
 	}
 
 	@Override

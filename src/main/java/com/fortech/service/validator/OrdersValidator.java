@@ -3,9 +3,11 @@ package com.fortech.service.validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fortech.model.AccountTypeEnum;
 import com.fortech.model.Token;
 import com.fortech.service.TokenService;
 import com.fortech.service.exception.BadRequestException;
+import com.fortech.service.exception.ForbiddenException;
 
 @Component
 public class OrdersValidator extends Validator<Token> {
@@ -18,7 +20,9 @@ public class OrdersValidator extends Validator<Token> {
 	@Override
 	public void validate() {
 		validateToken();
-		validateIdCorespondsWithToken();
+		if (toValidate.getAccount().getId() != userId) {
+			validateIsManager();
+		}		
 	}
 
 	private void validateToken() {
@@ -27,9 +31,9 @@ public class OrdersValidator extends Validator<Token> {
 		}
 	}
 
-	private void validateIdCorespondsWithToken() {
-		if (toValidate.getAccount().getId() != userId) {
-			throw new BadRequestException("Invalid user id,you can only see your carts");
+	private void validateIsManager() {
+		if (toValidate.getAccount().getAccountType().getType() != AccountTypeEnum.STORE_MANAGER) {
+			throw new ForbiddenException("Not authorised!");
 		}
 	}
 

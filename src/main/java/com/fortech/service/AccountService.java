@@ -18,7 +18,8 @@ public interface AccountService {
 	 Account findOne(Integer id);
 	 void delete(Integer id);
 	 void delete(Integer id, AccountDeleteDto credentials);
+	 void placeOrder(Integer userId,HttpHeaders requestHeader);
 	 CartDetailsDto getCartDetails(Integer userId,HttpHeaders requestHeader);
 	 List<OrderDto> getAllCustomerOrders(Integer userId,HttpHeaders requestHeader);
-
+	 
 }

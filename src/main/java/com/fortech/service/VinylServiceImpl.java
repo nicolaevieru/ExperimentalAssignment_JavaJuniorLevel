@@ -6,12 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fortech.model.Cart;
+import com.fortech.model.CartState;
+import com.fortech.model.CartStateEnum;
 import com.fortech.model.Item;
 import com.fortech.model.Token;
 import com.fortech.model.Vinyl;
 import com.fortech.model.dto.AddVinylToCartDto;
 import com.fortech.model.dto.VinylCreateDto;
 import com.fortech.repository.CartRepository;
+import com.fortech.repository.CartStateRepository;
 import com.fortech.repository.ItemRepository;
 import com.fortech.repository.TokenRepository;
 import com.fortech.repository.VinylRepository;
@@ -29,6 +32,9 @@ public class VinylServiceImpl implements VinylService {
 
 	@Autowired
 	private CartRepository cartRepository;
+	
+	@Autowired
+	private CartStateRepository cartStateRepository;
 
 	@Autowired
 	private ItemRepository itemRepository;
@@ -59,7 +65,8 @@ public class VinylServiceImpl implements VinylService {
 		vinylToCartValidator.setToValidate(vinylToCartDto);
 		vinylToCartValidator.validate();
 
-		Cart cart = findUserActiveCart(vinylToCartDto);
+		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+		Cart cart = findUserActiveCart(vinylToCartDto,activeCartState);
 		Vinyl vinyl = vinylRepository.findOne(vinylId);
 		Item item;
 		
@@ -86,8 +93,8 @@ public class VinylServiceImpl implements VinylService {
 		vinylRepository.save(vinylToAddInCart);
 	}
 
-	private Cart findUserActiveCart(AddVinylToCartDto vinylToCartDto) {
-		return cartRepository.findByAccount(vinylToCartDto.getToken().getAccount());
+	private Cart findUserActiveCart(AddVinylToCartDto vinylToCartDto,CartState cartState) {
+		return cartRepository.findByAccountAndCartState(vinylToCartDto.getToken().getAccount(),cartState);
 	}
 
 	private AddVinylToCartDto processRequestBody(Integer vinylId, Object requestBody) {

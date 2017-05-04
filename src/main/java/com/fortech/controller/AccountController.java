@@ -89,6 +89,14 @@ public class AccountController {
 		return new ResponseEntity<>(ordersDto,HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "users/{userId}/orders",method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<OrderDto> placeOrder(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader){
+		
+		accountService.placeOrder(userId,requestHeader);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 }
 
 
