@@ -18,13 +18,13 @@ import com.fortech.service.VinylService;
 public class VinylController {
 
 	@Autowired
-	private VinylService vinylServiceImpl;
+	private VinylService vinylService;
 	
 
 	@RequestMapping(method = RequestMethod.POST,consumes = "application/json")
 	public ResponseEntity<Vinyl> createVinyl(@RequestBody VinylCreateDto vinylCreateDto) {	
 		
-		vinylServiceImpl.save(vinylCreateDto);
+		vinylService.save(vinylCreateDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);		
 	}
@@ -33,7 +33,7 @@ public class VinylController {
 	@RequestMapping(value = "{vinylId}/cart",method = RequestMethod.POST,consumes = "application/json")
 	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Integer vinylId,@RequestBody Object requestBody) {
 						
-		vinylServiceImpl.addVinylToCart(vinylId,requestBody);
+		vinylService.addVinylToCart(vinylId,requestBody);
 
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}	
