@@ -104,7 +104,7 @@ public class AccountServiceImpl implements AccountService {
 		CartState cartState;	
 		Cart firstCart = new Cart();
 		
-		cartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+		cartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
 				
 		firstCart.setAccount(account);
 		firstCart.setCartState(cartState);
