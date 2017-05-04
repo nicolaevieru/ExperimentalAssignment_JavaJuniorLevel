@@ -1,6 +1,7 @@
 package com.fortech.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
@@ -20,6 +21,7 @@ import com.fortech.model.dto.AccountCreateDto;
 import com.fortech.model.dto.AccountDeleteDto;
 import com.fortech.model.dto.AccountLoginDto;
 import com.fortech.model.dto.CartDetailsDto;
+import com.fortech.model.dto.OrderDto;
 import com.fortech.service.AccountService;
 import com.fortech.service.TokenService;
 
@@ -78,6 +80,15 @@ public class AccountController {
 		
 		return new ResponseEntity<>(cartDetailsResponse,HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "users/{userId}/orders",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<List<OrderDto>> getAllCustomerOrders(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader){
+		
+		List<OrderDto> ordersDto = accountService.getAllCustomerOrders(userId,requestHeader);
+		
+		return new ResponseEntity<>(ordersDto,HttpStatus.OK);
+	}
+	
 }
 
 
