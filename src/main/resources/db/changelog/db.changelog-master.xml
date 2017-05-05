@@ -20,4 +20,5 @@
 	<include file="db/changelog/db.changelog-account-unique-constraint.xml"/>
 	<include file="db/changelog/db.changelog-auto-increment-sequence.xml"/>
 	<include file="db/changelog/db.changelog-add_account_id_to_token.xml"/>
+	<include file="db/changelog/db.changelog-add_isAvailable_to_Vinyl.xml"/>
 </databaseChangeLog>

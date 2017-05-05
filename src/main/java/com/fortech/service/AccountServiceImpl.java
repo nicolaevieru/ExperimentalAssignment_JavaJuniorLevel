@@ -24,6 +24,8 @@ import com.fortech.model.dto.AccountDeleteDto;
 import com.fortech.model.dto.CartDetailsDto;
 import com.fortech.model.dto.ItemDto;
 import com.fortech.model.dto.OrderDto;
+import com.fortech.model.dto.CustomerDto;
+import com.fortech.model.dto.CustomerListDto;
 import com.fortech.repository.AccountRepository;
 import com.fortech.repository.AccountStatusRepository;
 import com.fortech.repository.AccountTypeRepository;
@@ -35,6 +37,7 @@ import com.fortech.service.validator.AccountValidator;
 import com.fortech.service.validator.CartDetailsValidator;
 import com.fortech.service.validator.DeleteValidator;
 import com.fortech.service.validator.OrdersValidator;
+import com.fortech.service.validator.IsManagerValidator;
 import com.fortech.service.validator.Validator;
 
 @Service("accountService")
@@ -113,16 +116,16 @@ public class AccountServiceImpl implements AccountService {
 		Account account = new Account(toSave);
 		Account savedAccount = this.save(account);
 		createOpenCart(account);
-
+    
 		return savedAccount;
 	}
 
 	private Cart createOpenCart(Account account) {
 		CartState cartState;
 		Cart firstCart = new Cart();
-
-		cartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
-
+		
+		cartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
+				
 		firstCart.setAccount(account);
 		firstCart.setCartState(cartState);
 
@@ -170,7 +173,7 @@ public class AccountServiceImpl implements AccountService {
 		CartDetailsDto cartDetailsResponse = new CartDetailsDto();
 
 		Account userAccount = accountRepository.findOne(userId);
-		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
 		Cart activeCart = cartRepository.findByAccountAndCartState(userAccount, activeCartState);
 
 		itemList = (List<Item>) itemRepository.findByCart(activeCart);
@@ -225,7 +228,7 @@ public class AccountServiceImpl implements AccountService {
 		ordersValidator.validate();
 
 		CartState processingCartState = cartStateRepository.findByType(CartStateEnum.PROCESSING);
-		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
 
 		Cart activeCart = findCustomerActiveCart(token, activeCartState);
 		activeCart.setCartState(processingCartState);
@@ -236,6 +239,20 @@ public class AccountServiceImpl implements AccountService {
 
 	private Cart findCustomerActiveCart(Token token, CartState activeCartState) {
 		return cartRepository.findByAccountAndCartState(token.getAccount(),activeCartState);
+	}
+
+	@Override
+	public CustomerListDto getCustomers(Token token) {
+		Validator<Token> validator = new IsManagerValidator(token);
+		validator.validate();
+		List<CustomerDto> customers = accountRepository.getCustomers();
+		return new CustomerListDto(customers);
+	}
+
+	@Override
+	public void deleteAll() {
+		accountRepository.deleteAll();
+		
 	}
 
 }

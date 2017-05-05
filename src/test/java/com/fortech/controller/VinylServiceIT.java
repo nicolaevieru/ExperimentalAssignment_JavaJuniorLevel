@@ -6,24 +6,29 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fortech.model.Account;
 import com.fortech.model.Token;
 import com.fortech.model.dto.AccountCreateDto;
 import com.fortech.model.dto.AccountLoginDto;
 import com.fortech.model.dto.AddVinylToCartDto;
+import com.fortech.model.dto.VinylCanOrderListDto;
 import com.fortech.model.dto.VinylCreateDto;
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("test")
+@AutoConfigureTestDatabase
 public class VinylServiceIT {
 
 	@Autowired
@@ -68,7 +73,12 @@ public class VinylServiceIT {
 		assertEquals(HttpStatus.OK, sendRequestAddVinylToCart("/api/vinyls/"+ testAddVinylToCart.getVinylId() +"/cart").getStatusCode());
 		
 	}
-
+	
+	@Test
+	public void testGetRequestToVinylsReturns200() {
+		assertEquals(HttpStatus.OK, this.restTemplate.withBasicAuth("admin", "secret").getForEntity("/api/vinyls/", VinylCanOrderListDto.class).getStatusCode());
+	}
+ 
 	private VinylCreateDto createTestVinyl(String name, double cost, int stock) {
 		testCreateVinyl = new VinylCreateDto();
 

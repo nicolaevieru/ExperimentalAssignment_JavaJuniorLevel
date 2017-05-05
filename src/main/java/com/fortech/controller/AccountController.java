@@ -22,7 +22,9 @@ import com.fortech.model.dto.AccountDeleteDto;
 import com.fortech.model.dto.AccountLoginDto;
 import com.fortech.model.dto.CartDetailsDto;
 import com.fortech.model.dto.OrderDto;
+import com.fortech.model.dto.CustomerListDto;
 import com.fortech.service.AccountService;
+import com.fortech.service.ItemService;
 import com.fortech.service.TokenService;
 
 import io.swagger.annotations.ApiOperation;
@@ -38,19 +40,15 @@ public class AccountController {
 
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private ItemService itemService;
 
-	@ApiOperation(value = "Create an account.")
-	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_CREATED, message = ""),
-			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") })
 	@RequestMapping(value = "users", method = RequestMethod.POST)
 	public ResponseEntity<AccountCreateDto> createAccount(@RequestBody AccountCreateDto request) {
 		accountService.save(request);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-
-	@ApiOperation(value = "Login into account.")
-	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_OK, message = ""),
-			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") })
 
 	@RequestMapping(value = "users/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON)
 	public ResponseEntity<Map<String, String>> loginAccount(@RequestBody AccountLoginDto request) {
@@ -59,10 +57,6 @@ public class AccountController {
 		json.put("account id", accountService.findByEmail(request.getEmail()).getId().toString());
 		return new ResponseEntity<>(json, HttpStatus.OK);
 	}
-
-	@ApiOperation(value = "Delete an account.")
-	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_OK, message = ""),
-			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") })
 
 	@RequestMapping(value = "users/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON)
 	public ResponseEntity<AccountDeleteDto> deleteAccount(@PathVariable("id") Integer id,
@@ -73,15 +67,14 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "users/{userId}/cart", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
-	public ResponseEntity<CartDetailsDto> getCartDetails(@PathVariable Integer userId,
-			@RequestHeader HttpHeaders requestHeader) {
+	public ResponseEntity<CartDetailsDto> getCartDetails(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader) {
 
 		CartDetailsDto cartDetailsResponse = accountService.getCartDetails(userId, requestHeader);
 
 		return new ResponseEntity<>(cartDetailsResponse, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "users/{userId}/orders", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
+	@RequestMapping(value = "users/{userId}/orders", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<List<OrderDto>> getAllCustomerOrders(@PathVariable Integer userId,
 			@RequestHeader HttpHeaders requestHeader) {
 
@@ -96,6 +89,21 @@ public class AccountController {
 		accountService.placeOrder(userId, requestHeader);
 
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "customers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
+	public ResponseEntity<CustomerListDto> getCustomers(@RequestHeader HttpHeaders header) {
+
+		return new ResponseEntity<>(accountService.getCustomers(tokenService.findByHash(header.getFirst("token"))),
+				HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "users/{userId}/cart/{itemId}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<AccountDeleteDto> removeItemFromCart(@PathVariable("userId") Integer userId,
+			@PathVariable("itemId") Integer itemId, @RequestBody Map<String, String> requestBody) {
+		
+		itemService.deleteItem(requestBody.get("token"), itemId, userId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }
