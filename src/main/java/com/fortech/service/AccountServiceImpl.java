@@ -94,7 +94,7 @@ public class AccountServiceImpl implements AccountService {
 		
 		Account account = new Account(toSave);
 		Account savedAccount = this.save(account);
-		Cart firstCart = createFirstCart(account);
+		createFirstCart(account);
 		
 		return savedAccount;
 	}
