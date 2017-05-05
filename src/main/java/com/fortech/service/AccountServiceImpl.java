@@ -170,7 +170,7 @@ public class AccountServiceImpl implements AccountService {
 		CartDetailsDto cartDetailsResponse = new CartDetailsDto();
 
 		Account userAccount = accountRepository.findOne(userId);
-		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
 		Cart activeCart = cartRepository.findByAccountAndCartState(userAccount, activeCartState);
 
 		itemList = (List<Item>) itemRepository.findByCart(activeCart);
@@ -225,7 +225,7 @@ public class AccountServiceImpl implements AccountService {
 		ordersValidator.validate();
 
 		CartState processingCartState = cartStateRepository.findByType(CartStateEnum.PROCESSING);
-		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
 
 		Cart activeCart = findCustomerActiveCart(token, activeCartState);
 		activeCart.setCartState(processingCartState);

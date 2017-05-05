@@ -25,5 +25,6 @@ public interface AccountService {
 	 CartDetailsDto getCartDetails(Integer userId,HttpHeaders requestHeader);
 	 List<OrderDto> getAllCustomerOrders(Integer userId,HttpHeaders requestHeader);
 	 CustomerListDto getCustomers(Token token);
+	 void deleteAll();
 
 }
