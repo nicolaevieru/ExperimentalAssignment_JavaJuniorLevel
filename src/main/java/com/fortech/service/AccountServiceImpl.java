@@ -113,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
 
 		Account account = new Account(toSave);
 		Account savedAccount = this.save(account);
-		Cart firstCart = createOpenCart(account);
+		createOpenCart(account);
 
 		return savedAccount;
 	}
@@ -165,8 +165,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	private CartDetailsDto createCartDetails(Integer userId) {
-		Object itemsDetailsQueryResponse;
-		List<Item> itemList = new ArrayList<>();
+		List<Item> itemList;
 		List<ItemDto> itemsDetails = new ArrayList<>();
 		CartDetailsDto cartDetailsResponse = new CartDetailsDto();
 
@@ -174,11 +173,7 @@ public class AccountServiceImpl implements AccountService {
 		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
 		Cart activeCart = cartRepository.findByAccountAndCartState(userAccount, activeCartState);
 
-		if ((itemsDetailsQueryResponse = itemRepository.findByCart(activeCart)).getClass() == Cart.class) {
-			itemList.add((Item) itemsDetailsQueryResponse);
-		} else if (itemsDetailsQueryResponse.getClass() == List.class) {
-			itemList = (List<Item>) itemsDetailsQueryResponse;
-		}
+		itemList = (List<Item>) itemRepository.findByCart(activeCart);
 
 		for (Item item : itemList) {
 			String name = item.getVinyl().getName();
@@ -198,8 +193,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public List<OrderDto> getAllCustomerOrders(Integer userId, HttpHeaders requestHeader) {
-		Object customerQueryCartsResponse;
-		List<Cart> customerCarts = new ArrayList<>();
+		List<Cart> customerCarts;
 		List<OrderDto> allCustomerOrders = new ArrayList<>();
 
 		Token token = tokenService.findByHash(requestHeader.getFirst("token"));
@@ -209,13 +203,8 @@ public class AccountServiceImpl implements AccountService {
 		ordersValidator.validate();
 
 		Account customerAccount = accountRepository.findOne(userId);
-
-		if ((customerQueryCartsResponse = cartRepository.findByAccount(customerAccount)).getClass() == Cart.class) {
-			customerCarts.add((Cart) customerQueryCartsResponse);
-		} else if (customerQueryCartsResponse.getClass() == List.class) {
-			customerCarts = (List<Cart>) customerQueryCartsResponse;
-		}
-
+		customerCarts = cartRepository.findByAccount(customerAccount);
+		
 		for (Cart cart : customerCarts) {
 			Double cost = cart.getCost();
 			Date orderDate = cart.getOrderDate();

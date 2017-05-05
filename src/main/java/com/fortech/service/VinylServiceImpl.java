@@ -1,5 +1,6 @@
 package com.fortech.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,8 @@ import com.fortech.repository.ItemRepository;
 import com.fortech.repository.TokenRepository;
 import com.fortech.repository.VinylRepository;
 import com.fortech.service.validator.AddVinylToCartValidator;
-import com.fortech.service.validator.VinylCreateValidator;;
+import com.fortech.service.validator.VinylCreateValidator;
+import com.fortech.service.validator.VinylUpdateValidator;;
 
 @Service("vinylService")
 public class VinylServiceImpl implements VinylService {
@@ -32,7 +34,7 @@ public class VinylServiceImpl implements VinylService {
 
 	@Autowired
 	private CartRepository cartRepository;
-	
+
 	@Autowired
 	private CartStateRepository cartStateRepository;
 
@@ -44,6 +46,9 @@ public class VinylServiceImpl implements VinylService {
 
 	@Autowired
 	private VinylCreateValidator vinylCreateValidator;
+
+	@Autowired
+	private VinylUpdateValidator vinylUpdateValidator;
 
 	@Override
 	public Vinyl save(VinylCreateDto vinylCreateDto) {
@@ -66,13 +71,13 @@ public class VinylServiceImpl implements VinylService {
 		vinylToCartValidator.validate();
 
 		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
-		Cart cart = findUserActiveCart(vinylToCartDto,activeCartState);
+		Cart cart = findUserActiveCart(vinylToCartDto, activeCartState);
 		Vinyl vinyl = vinylRepository.findOne(vinylId);
 		Item item;
-		
-		if((item = itemRepository.findByVinylAndCart(vinyl, cart)) == null){
+
+		if ((item = itemRepository.findByVinylAndCart(vinyl, cart)) == null) {
 			item = new Item(vinylToCartDto.getQuantity(), cart, vinyl);
-		} else{
+		} else {
 			item.setQuantity(item.getQuantity() + vinylToCartDto.getQuantity());
 		}
 
@@ -93,8 +98,8 @@ public class VinylServiceImpl implements VinylService {
 		vinylRepository.save(vinylToAddInCart);
 	}
 
-	private Cart findUserActiveCart(AddVinylToCartDto vinylToCartDto,CartState cartState) {
-		return cartRepository.findByAccountAndCartState(vinylToCartDto.getToken().getAccount(),cartState);
+	private Cart findUserActiveCart(AddVinylToCartDto vinylToCartDto, CartState cartState) {
+		return cartRepository.findByAccountAndCartState(vinylToCartDto.getToken().getAccount(), cartState);
 	}
 
 	private AddVinylToCartDto processRequestBody(Integer vinylId, Object requestBody) {
@@ -103,6 +108,43 @@ public class VinylServiceImpl implements VinylService {
 		Token token = tokenRepository.findByHash(tokenHash);
 
 		return new AddVinylToCartDto(vinylId, quantity, token);
+	}
+
+	@Override
+	public void updateVinylInfo(Integer vinylId, VinylCreateDto vinylUpdateDto) {
+
+		vinylUpdateDto.setTokenObject(tokenRepository.findByHash(vinylUpdateDto.getToken()));
+
+		vinylUpdateValidator.setVinylId(vinylId);
+		vinylUpdateValidator.setToValidate(vinylUpdateDto);
+		vinylUpdateValidator.validate();
+
+		Vinyl vinylToBeUpdated = vinylRepository.findOne(vinylId);
+		Vinyl oldVinyl = new Vinyl(vinylToBeUpdated);
+
+		vinylToBeUpdated.setName(vinylUpdateDto.getName());
+		vinylToBeUpdated.setCost(vinylUpdateDto.getCost());
+		vinylToBeUpdated.setStock(vinylUpdateDto.getStock());
+
+		vinylRepository.save(vinylToBeUpdated);
+		updateAllCarts(oldVinyl,vinylToBeUpdated);
+	}
+	
+	private void updateAllCarts(Vinyl oldVinyl,Vinyl newVinyl) {
+		List<Item> updatedItems;
+		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+		
+		updatedItems = itemRepository.findByVinylAndCart_CartState(newVinyl, activeCartState);
+
+		for (Item item : updatedItems) {
+			Double cartOldCost = item.getCart().getCost();
+			Double oldItemCost = item.getQuantity() * oldVinyl.getCost();
+			Double newItemCost = item.getQuantity() * newVinyl.getCost();
+			
+			item.getCart().setCost((cartOldCost - oldItemCost) + newItemCost);
+		}
+		
+		itemRepository.save(updatedItems);
 	}
 
 }
