@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fortech.model.Vinyl;
 import com.fortech.model.dto.VinylCanOrderListDto;
 import com.fortech.model.dto.VinylCreateDto;
+import com.fortech.model.dto.VinylDetailsDto;
 import com.fortech.model.dto.VinylInventoryListDto;
 import com.fortech.service.TokenService;
 import com.fortech.service.VinylService;
@@ -71,11 +72,20 @@ public class VinylController {
 		return new ResponseEntity<>(vinylService.getVinyls(), HttpStatus.OK);
 
 	}
-	
+
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON)
-	public ResponseEntity<VinylCanOrderListDto> deleteVinyl(@RequestBody Map<String, String> request, @PathVariable("id") Integer id ) {
+	public ResponseEntity<VinylCanOrderListDto> deleteVinyl(@RequestBody Map<String, String> request,
+			@PathVariable("id") Integer id) {
 		vinylService.deleteVinyl(id, request.get("token"));
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+	}
+
+	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
+	public ResponseEntity<VinylDetailsDto> getDetails(@RequestHeader HttpHeaders header,
+			@PathVariable("id") Integer id) {
+
+		return new ResponseEntity<>(vinylService.getDetails(id, header.getFirst("token")), HttpStatus.OK);
 
 	}
 
