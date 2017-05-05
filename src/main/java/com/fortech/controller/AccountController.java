@@ -22,6 +22,7 @@ import com.fortech.model.dto.AccountDeleteDto;
 import com.fortech.model.dto.AccountLoginDto;
 import com.fortech.model.dto.CartDetailsDto;
 import com.fortech.model.dto.OrderDto;
+import com.fortech.model.dto.CustomerListDto;
 import com.fortech.service.AccountService;
 import com.fortech.service.TokenService;
 
@@ -97,6 +98,12 @@ public class AccountController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "customers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
+	public ResponseEntity<CustomerListDto> getCustomers(@RequestHeader HttpHeaders header) {
+		
+		return new ResponseEntity<>(accountService.getCustomers(tokenService.findByHash(header.getFirst("token"))), HttpStatus.OK);
+	}
+
 }
 
 

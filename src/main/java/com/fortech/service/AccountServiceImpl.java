@@ -24,6 +24,8 @@ import com.fortech.model.dto.AccountDeleteDto;
 import com.fortech.model.dto.CartDetailsDto;
 import com.fortech.model.dto.ItemDto;
 import com.fortech.model.dto.OrderDto;
+import com.fortech.model.dto.CustomerDto;
+import com.fortech.model.dto.CustomerListDto;
 import com.fortech.repository.AccountRepository;
 import com.fortech.repository.AccountStatusRepository;
 import com.fortech.repository.AccountTypeRepository;
@@ -35,6 +37,7 @@ import com.fortech.service.validator.AccountValidator;
 import com.fortech.service.validator.CartDetailsValidator;
 import com.fortech.service.validator.DeleteValidator;
 import com.fortech.service.validator.OrdersValidator;
+import com.fortech.service.validator.IsManagerValidator;
 import com.fortech.service.validator.Validator;
 
 @Service("accountService")
@@ -249,6 +252,20 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account findOne(Integer id) {
 		return accountRepository.findOne(id);
+	}
+
+	@Override
+	public CustomerListDto getCustomers(Token token) {
+		Validator<Token> validator = new IsManagerValidator(token);
+		validator.validate();
+		List<CustomerDto> customers = accountRepository.getCustomers();
+		return new CustomerListDto(customers);
+	}
+
+	@Override
+	public void deleteAll() {
+		accountRepository.deleteAll();
+		
 	}
 
 }
