@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fortech.model.Vinyl;
 import com.fortech.model.dto.VinylCanOrderDto;
+import com.fortech.model.dto.VinylDetailsDto;
 import com.fortech.model.dto.VinylInventoryDto;
 
 @Repository("vinylRepository")
@@ -19,4 +20,7 @@ public interface VinylRepository extends CrudRepository<Vinyl, Integer> {
 	
 	@Query("select new com.fortech.model.dto.VinylCanOrderDto(v.id, v.name, v.cost) from Vinyl v WHERE v.available = true")
 	List<VinylCanOrderDto> getVinyls();
+	
+	@Query("select new com.fortech.model.dto.VinylDetailsDto(v.name, v.cost, v.stock) from Vinyl v WHERE v.available = true")
+	VinylDetailsDto getVinylDetails();
 }

@@ -22,14 +22,18 @@ public class Item {
 	@Column(name = "QUANTITY")
 	private int quantity;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "CARTID")
 	private Cart cart;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "VINYLID")
 	private Vinyl vinyl;
-
+	
+	public Item(){
+		
+	}
+	
 	public Item(int quantity, Cart cart, Vinyl vinyl) {
 		super();
 		this.quantity = quantity;
