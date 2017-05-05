@@ -1,5 +1,6 @@
 package com.fortech.service;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,17 @@ import com.fortech.model.Vinyl;
 import com.fortech.model.dto.AddVinylToCartDto;
 import com.fortech.model.dto.VinylCanOrderListDto;
 import com.fortech.model.dto.VinylCreateDto;
+import com.fortech.model.dto.VinylDetailsDto;
 import com.fortech.model.dto.VinylInventoryListDto;
 import com.fortech.repository.CartRepository;
 import com.fortech.repository.ItemRepository;
 import com.fortech.repository.TokenRepository;
 import com.fortech.repository.VinylRepository;
+import com.fortech.service.exception.NotFoundException;
+import com.fortech.service.exception.UnauthorizedException;
 import com.fortech.service.validator.AddVinylToCartValidator;
 import com.fortech.service.validator.IsManagerValidator;
+import com.fortech.service.validator.Validator;
 import com.fortech.service.validator.VinylCreateValidator;;
 
 @Service("vinylService")
@@ -99,6 +104,27 @@ public class VinylServiceImpl implements VinylService {
 	@Override
 	public VinylCanOrderListDto getVinyls() {
 		return new VinylCanOrderListDto(vinylRepository.getVinyls());
+	}
+
+	@Override
+	public void deleteVinyl(Integer id, String token) {
+		Validator<Token> validator = new IsManagerValidator(tokenRepository.findByHash(token));
+		validator.validate();
+		Vinyl toBeDeleted = vinylRepository.findOne(id);
+		if (toBeDeleted == null) {
+			throw new NotFoundException("Vinyl not Found");
+		}
+		toBeDeleted.setAvailable(false);
+		vinylRepository.save(toBeDeleted);
+	}
+
+	@Override
+	public VinylDetailsDto getDetails(Integer id, String token) {
+		if(tokenRepository.findByHash(token) == null) {
+			throw new UnauthorizedException("token not valid");
+		}
+		return vinylRepository.getVinylDetails();
+		
 	}
 
 }
