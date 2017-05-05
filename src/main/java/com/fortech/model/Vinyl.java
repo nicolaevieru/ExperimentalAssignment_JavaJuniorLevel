@@ -11,6 +11,7 @@ import javax.validation.constraints.Min;
 
 import com.fortech.model.dto.VinylCreateDto;
 
+
 @Entity
 public class Vinyl {
 
@@ -24,11 +25,22 @@ public class Vinyl {
 
 	@Column(name = "cost")
 	private double cost = 0.0;
+	
+	@Column(name = "IS_AVAILABLE")
+	private boolean available = true;
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(boolean available) {
+		this.available = available;
+	}
 
 	@Column(name = "stock")
 	@Min(0)
 	private int stock = 0;
-
+	
 	public Vinyl() {
 	}
 
@@ -37,13 +49,6 @@ public class Vinyl {
 		this.name = vinyl.getName();
 		this.cost = vinyl.getCost();
 		this.stock = vinyl.getStock();
-	}
-
-	public Vinyl(Vinyl copyVinyl) {
-		this.id = copyVinyl.getId();
-		this.name = copyVinyl.getName();
-		this.cost = copyVinyl.getCost();
-		this.stock = copyVinyl.getStock();
 	}
 
 	public Integer getId() {

@@ -114,16 +114,16 @@ public class AccountServiceImpl implements AccountService {
 		Account account = new Account(toSave);
 		Account savedAccount = this.save(account);
 		createOpenCart(account);
-
+    
 		return savedAccount;
 	}
 
 	private Cart createOpenCart(Account account) {
 		CartState cartState;
 		Cart firstCart = new Cart();
-
-		cartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
-
+		
+		cartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
+				
 		firstCart.setAccount(account);
 		firstCart.setCartState(cartState);
 

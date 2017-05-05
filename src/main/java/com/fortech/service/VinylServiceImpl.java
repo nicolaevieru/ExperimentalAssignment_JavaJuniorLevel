@@ -1,27 +1,30 @@
 package com.fortech.service;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fortech.model.Cart;
-import com.fortech.model.CartState;
-import com.fortech.model.CartStateEnum;
 import com.fortech.model.Item;
 import com.fortech.model.Token;
 import com.fortech.model.Vinyl;
 import com.fortech.model.dto.AddVinylToCartDto;
+import com.fortech.model.dto.VinylCanOrderListDto;
 import com.fortech.model.dto.VinylCreateDto;
+import com.fortech.model.dto.VinylDetailsDto;
+import com.fortech.model.dto.VinylInventoryListDto;
 import com.fortech.repository.CartRepository;
-import com.fortech.repository.CartStateRepository;
 import com.fortech.repository.ItemRepository;
 import com.fortech.repository.TokenRepository;
 import com.fortech.repository.VinylRepository;
+import com.fortech.service.exception.NotFoundException;
+import com.fortech.service.exception.UnauthorizedException;
 import com.fortech.service.validator.AddVinylToCartValidator;
-import com.fortech.service.validator.VinylCreateValidator;
-import com.fortech.service.validator.VinylUpdateValidator;;
+import com.fortech.service.validator.IsManagerValidator;
+import com.fortech.service.validator.Validator;
+import com.fortech.service.validator.VinylCreateValidator;;
 
 @Service("vinylService")
 public class VinylServiceImpl implements VinylService {
@@ -36,9 +39,6 @@ public class VinylServiceImpl implements VinylService {
 	private CartRepository cartRepository;
 
 	@Autowired
-	private CartStateRepository cartStateRepository;
-
-	@Autowired
 	private ItemRepository itemRepository;
 
 	@Autowired
@@ -46,9 +46,6 @@ public class VinylServiceImpl implements VinylService {
 
 	@Autowired
 	private VinylCreateValidator vinylCreateValidator;
-
-	@Autowired
-	private VinylUpdateValidator vinylUpdateValidator;
 
 	@Override
 	public Vinyl save(VinylCreateDto vinylCreateDto) {
@@ -70,27 +67,14 @@ public class VinylServiceImpl implements VinylService {
 		vinylToCartValidator.setToValidate(vinylToCartDto);
 		vinylToCartValidator.validate();
 
-		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
-		Cart cart = findUserActiveCart(vinylToCartDto, activeCartState);
+		Cart cart = findUserActiveCart(vinylToCartDto);
 		Vinyl vinyl = vinylRepository.findOne(vinylId);
-		Item item;
-
-		if ((item = itemRepository.findByVinylAndCart(vinyl, cart)) == null) {
-			item = new Item(vinylToCartDto.getQuantity(), cart, vinyl);
-		} else {
-			item.setQuantity(item.getQuantity() + vinylToCartDto.getQuantity());
-		}
+		Item item = new Item(vinylToCartDto.getQuantity(), cart, vinyl);
 
 		itemRepository.save(item);
 
-		updateVinylInfo(vinyl, vinylToCartDto.getQuantity());
-		updateCartInfo(cart, vinyl, vinylToCartDto.getQuantity());
+		updateVinylInfo(vinylRepository.findOne(vinylId), item.getQuantity());
 
-	}
-
-	private void updateCartInfo(Cart cart, Vinyl vinylToAddInCart, Integer quantity) {
-		cart.setCost(cart.getCost() + (vinylToAddInCart.getCost() * quantity));
-		cartRepository.save(cart);
 	}
 
 	private void updateVinylInfo(Vinyl vinylToAddInCart, Integer quantity) {
@@ -98,8 +82,8 @@ public class VinylServiceImpl implements VinylService {
 		vinylRepository.save(vinylToAddInCart);
 	}
 
-	private Cart findUserActiveCart(AddVinylToCartDto vinylToCartDto, CartState cartState) {
-		return cartRepository.findByAccountAndCartState(vinylToCartDto.getToken().getAccount(), cartState);
+	private Cart findUserActiveCart(AddVinylToCartDto vinylToCartDto) {
+		return cartRepository.findByAccount(vinylToCartDto.getToken().getAccount());
 	}
 
 	private AddVinylToCartDto processRequestBody(Integer vinylId, Object requestBody) {
@@ -111,6 +95,39 @@ public class VinylServiceImpl implements VinylService {
 	}
 
 	@Override
+	public VinylInventoryListDto getInventory(Token token) {
+		IsManagerValidator validator = new IsManagerValidator(token);
+		validator.validate();
+		return new VinylInventoryListDto(vinylRepository.getInventory());
+	}
+
+	@Override
+	public VinylCanOrderListDto getVinyls() {
+		return new VinylCanOrderListDto(vinylRepository.getVinyls());
+	}
+
+	@Override
+	public void deleteVinyl(Integer id, String token) {
+		Validator<Token> validator = new IsManagerValidator(tokenRepository.findByHash(token));
+		validator.validate();
+		Vinyl toBeDeleted = vinylRepository.findOne(id);
+		if (toBeDeleted == null) {
+			throw new NotFoundException("Vinyl not Found");
+		}
+		toBeDeleted.setAvailable(false);
+		vinylRepository.save(toBeDeleted);
+	}
+
+	@Override
+	public VinylDetailsDto getDetails(Integer id, String token) {
+		if(tokenRepository.findByHash(token) == null) {
+			throw new UnauthorizedException("token not valid");
+		}
+		return vinylRepository.getVinylDetails();
+		
+	}
+  
+  	@Override
 	public void updateVinylInfo(Integer vinylId, VinylCreateDto vinylUpdateDto) {
 
 		vinylUpdateDto.setTokenObject(tokenRepository.findByHash(vinylUpdateDto.getToken()));
