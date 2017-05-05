@@ -1,12 +1,10 @@
 package com.fortech.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,43 +19,30 @@ public class VinylController {
 
 	@Autowired
 	private VinylService vinylService;
-	
 
-	@RequestMapping(method = RequestMethod.POST,consumes = "application/json")
-	public ResponseEntity<Vinyl> createVinyl(@RequestBody VinylCreateDto vinylCreateDto) {	
-		
+	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<Vinyl> createVinyl(@RequestBody VinylCreateDto vinylCreateDto) {
+
 		vinylService.save(vinylCreateDto);
-		
-		return new ResponseEntity<>(HttpStatus.CREATED);		
+
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	
-	
-	@RequestMapping(value = "{vinylId}/cart",method = RequestMethod.POST,consumes = "application/json")
-	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Integer vinylId,@RequestBody Object requestBody) {
-						
-		vinylService.addVinylToCart(vinylId,requestBody);
+
+	@RequestMapping(value = "{vinylId}/cart", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Integer vinylId, @RequestBody Object requestBody) {
+
+		vinylService.addVinylToCart(vinylId, requestBody);
 
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
-	}	
-	
-	
-	@RequestMapping(value = "{vinylId}",method = RequestMethod.PUT,consumes = "application/json")
-	public ResponseEntity<Vinyl> updateVinylInfo(@PathVariable Integer vinylId,@RequestBody VinylCreateDto vinylUpdateDto){
-		
-		vinylService.updateVinylInfo(vinylId,vinylUpdateDto);
-		
+	}
+
+	@RequestMapping(value = "{vinylId}", method = RequestMethod.PUT, consumes = "application/json")
+	public ResponseEntity<Vinyl> updateVinylInfo(@PathVariable Integer vinylId,
+			@RequestBody VinylCreateDto vinylUpdateDto) {
+
+		vinylService.updateVinylInfo(vinylId, vinylUpdateDto);
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	
+
 }
-
-
-
-
-
-
-
-
-
-

@@ -41,6 +41,4 @@ public class CartDetailsValidator extends Validator<Token> {
 		this.userId = userId;
 	}
 	
-	
-	
 }

@@ -5,13 +5,9 @@ import com.fortech.model.Token;
 public class VinylCreateDto {
 
 	private Token tokenObject;
-	
 	private String token;
-	
 	private String name;
-
 	private double cost;
-
 	private int stock;
 
 	public String getName() {

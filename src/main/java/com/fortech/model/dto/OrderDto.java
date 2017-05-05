@@ -9,9 +9,7 @@ import com.fortech.model.CartStateEnum;
 public class OrderDto implements Serializable {
 
 	private double cost = 0.0;
-
 	private Date orderDate;
-
 	private CartStateEnum cartState;
 
 	public OrderDto(double cost, Date orderDate, CartStateEnum cartState) {

@@ -44,44 +44,44 @@ public class Cart {
 		this.cartState = cartState;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public Account getAccount() {
 		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-
-	public double getCost() {
-		return cost;
-	}
-
-	public void setCost(double cost) {
-		this.cost = cost;
-	}
-
-	public Date getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
 	}
 
 	public CartState getCartState() {
 		return cartState;
 	}
 
+	public double getCost() {
+		return cost;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
 	public void setCartState(CartState cartState) {
 		this.cartState = cartState;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
 	}
 
 }

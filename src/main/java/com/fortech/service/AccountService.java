@@ -15,7 +15,6 @@ public interface AccountService {
 	 Account save(Account toSave);
 	 Account save(AccountCreateDto toSave);
 	 Account findByEmail(String email);
-	 Account findOne(Integer id);
 	 void delete(Integer id);
 	 void delete(Integer id, AccountDeleteDto credentials);
 	 void placeOrder(Integer userId,HttpHeaders requestHeader);

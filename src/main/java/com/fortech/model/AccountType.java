@@ -10,34 +10,23 @@ import javax.persistence.SequenceGenerator;
 
 @Entity
 public class AccountType {
-	
+
 	@Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="HIBERNATE_SEQ")
-    @SequenceGenerator(name="HIBERNATE_SEQ", sequenceName="HIBERNATE_SEQ", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HIBERNATE_SEQ")
+	@SequenceGenerator(name = "HIBERNATE_SEQ", sequenceName = "HIBERNATE_SEQ", allocationSize = 1)
 	private Integer id;
-	
+
 	@Enumerated(EnumType.STRING)
 	private AccountTypeEnum type;
-	
+
 	public AccountType() {
-		
+
 	}
-	
+
 	public AccountType(AccountTypeEnum type) {
 		this.type = type;
 	}
-	
-	public Integer getId() {
-		return id;
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
-	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -56,16 +45,30 @@ public class AccountType {
 			return false;
 		return true;
 	}
-	public void setId(Integer id) {
-		this.id = id;
+
+	public Integer getId() {
+		return id;
 	}
+
 	public AccountTypeEnum getType() {
 		return type;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public void setType(AccountTypeEnum typeName) {
 		this.type = typeName;
 	}
-	
-	
 
 }

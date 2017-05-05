@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fortech.model.Token;
 import com.fortech.model.dto.AccountLoginDto;
+import com.fortech.repository.AccountRepository;
 import com.fortech.repository.TokenRepository;
 import com.fortech.service.validator.LoginValidator;
 
@@ -18,12 +19,12 @@ public class TokenServiceImpl implements TokenService {
 	TokenRepository tokenRepository;
 	
 	@Autowired
-	AccountService accountService;
+	AccountRepository accountRepository;
 	
 	@Override
 	public Token save(AccountLoginDto emailAndPass) {
 		Token token = new Token();
-		token.setAccount(accountService.findByEmail(emailAndPass.getEmail()));
+		token.setAccount(accountRepository.findByEmail(emailAndPass.getEmail()));
 		LoginValidator loginValidator = new LoginValidator(emailAndPass);
 		loginValidator.setAccount(token.getAccount());
 		loginValidator.validate();
@@ -42,15 +43,13 @@ public class TokenServiceImpl implements TokenService {
 	}
 
 	@Override
-	public Token findByHash(String token) {
-		
+	public Token findByHash(String token) {	
 		return tokenRepository.findByHash(token);
 	}
 	
 
 	@Override
 	public void delete(Integer id) {
-		tokenRepository.delete(id);
-		
+		tokenRepository.delete(id);	
 	}
 }

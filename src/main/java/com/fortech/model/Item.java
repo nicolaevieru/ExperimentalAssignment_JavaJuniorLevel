@@ -29,8 +29,9 @@ public class Item {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "VINYLID")
 	private Vinyl vinyl;
-	
-	public Item(){}
+
+	public Item() {
+	}
 
 	public Item(int quantity, Cart cart, Vinyl vinyl) {
 		super();
@@ -39,32 +40,32 @@ public class Item {
 		this.vinyl = vinyl;
 	}
 
-	public Integer getId() {
-		return id;
+	public Cart getCart() {
+		return cart;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public Integer getId() {
+		return id;
 	}
 
 	public int getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public Cart getCart() {
-		return cart;
+	public Vinyl getVinyl() {
+		return vinyl;
 	}
 
 	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
 
-	public Vinyl getVinyl() {
-		return vinyl;
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public void setVinyl(Vinyl vinyl) {

@@ -22,30 +22,26 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HIBERNATE_SEQ")
 	@SequenceGenerator(name = "HIBERNATE_SEQ", sequenceName = "HIBERNATE_SEQ", allocationSize=1)
 	private Integer id;
+	
 	@Column(name = "PASSWORD_HASH")
 	private String passwordHash;
+	
 	private String email;
 	private String firstName;
 	private String lastName;
+	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "status_id")
 	private AccountStatus accountStatus;
 	
-	public AccountStatus getAccountStatus() {
-		return accountStatus;
-	}
-
-	public void setAccountStatus(AccountStatus accountStatus) {
-		this.accountStatus = accountStatus;
-	}
-
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "type_id")
 	private AccountType accountType;
+
 	
 	public Account() {
 	}
-	
+
 	public Account(AccountCreateDto toCopy) {
 		this.firstName = toCopy.getFirstName();
 		this.lastName = toCopy.getLastName();
@@ -54,19 +50,7 @@ public class Account {
 		this.accountType = new AccountType(AccountTypeEnum.CUSTOMER);
 		this.accountStatus = new AccountStatus(AccountStatusEnum.ACTIVE);
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((passwordHash == null) ? 0 : passwordHash.hashCode());
-		return result;
-	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -103,6 +87,10 @@ public class Account {
 			return false;
 		return true;
 	}
+	
+	public AccountStatus getAccountStatus() {
+		return accountStatus;
+	}
 
 	public AccountType getAccountType() {
 		return accountType;
@@ -124,6 +112,26 @@ public class Account {
 		return lastName;
 	}
 
+	public String getPasswordHash() {
+		return passwordHash;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((passwordHash == null) ? 0 : passwordHash.hashCode());
+		return result;
+	}
+
+	public void setAccountStatus(AccountStatus accountStatus) {
+		this.accountStatus = accountStatus;
+	}
+
 	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
 	}
@@ -142,10 +150,6 @@ public class Account {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public String getPasswordHash() {
-		return passwordHash;
 	}
 
 	public void setPasswordHash(String passwordHash) {

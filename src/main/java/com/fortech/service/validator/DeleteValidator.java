@@ -25,7 +25,6 @@ public class DeleteValidator extends Validator<AccountDeleteDto> {
 	}
 	
 	public DeleteValidator() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

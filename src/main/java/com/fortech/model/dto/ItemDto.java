@@ -1,13 +1,10 @@
 package com.fortech.model.dto;
 
 public class ItemDto {
-	
+
 	private String name;
-	
 	private Integer quantity;
-	
 	private Double cost;
-	
 
 	public ItemDto(String name, Integer quantity, Double cost) {
 		super();

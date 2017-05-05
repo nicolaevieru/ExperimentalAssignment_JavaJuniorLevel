@@ -5,9 +5,7 @@ import com.fortech.model.Token;
 public class AddVinylToCartDto {
 
 	private Integer vinylId;
-
 	private int quantity;
-
 	private Token token;
 	
 	public AddVinylToCartDto(){}

@@ -1,6 +1,7 @@
 package com.fortech.model.dto;
 
 public class AccountDeleteDto {
+	
 	private String token;
 	private String password;
 	

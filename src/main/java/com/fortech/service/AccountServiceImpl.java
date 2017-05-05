@@ -74,6 +74,9 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account save(Account account) {
 		Account existingAccount = accountRepository.findByEmail(account.getEmail());
+		AccountStatus accountStatus = accountStatusRepository.findByStatus(account.getAccountStatus().getStatus());
+		AccountType accountType = accountTypeRepository.findByType(account.getAccountType().getType());
+
 		if (existingAccount != null && existingAccount.getAccountStatus().getStatus() != AccountStatusEnum.DELETED) {
 			if (existingAccount.getAccountStatus().getStatus() != AccountStatusEnum.DELETED) {
 				throw new ForbiddenException("Email address already in use");
@@ -82,10 +85,8 @@ public class AccountServiceImpl implements AccountService {
 				return accountRepository.save(account);
 			}
 		}
-		AccountStatus accountStatus;
-		AccountType accountType;
-		accountStatus = accountStatusRepository.findByStatus(account.getAccountStatus().getStatus());
-		accountType = accountTypeRepository.findByType(account.getAccountType().getType());
+		
+		
 		if (accountType == null) {
 			accountType = accountTypeRepository.save(account.getAccountType());
 		}
@@ -95,6 +96,7 @@ public class AccountServiceImpl implements AccountService {
 
 		account.setAccountType(accountType);
 		account.setAccountStatus(accountStatus);
+		
 		return accountRepository.save(account);
 	}
 
@@ -144,6 +146,7 @@ public class AccountServiceImpl implements AccountService {
 		deleteValidator.setIdToBeDeleted(id);
 		deleteValidator.setToValidate(credentials);
 		deleteValidator.validate();
+		
 		Token token = tokenService.findByHash(credentials.getToken());
 		tokenService.delete(token.getId());
 		delete(id);
@@ -233,11 +236,6 @@ public class AccountServiceImpl implements AccountService {
 
 	private Cart findCustomerActiveCart(Token token, CartState activeCartState) {
 		return cartRepository.findByAccountAndCartState(token.getAccount(),activeCartState);
-	}
-
-	@Override
-	public Account findOne(Integer id) {
-		return accountRepository.findOne(id);
 	}
 
 }

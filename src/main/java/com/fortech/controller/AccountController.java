@@ -51,7 +51,7 @@ public class AccountController {
 	@ApiOperation(value = "Login into account.")
 	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_OK, message = ""),
 			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") })
-	
+
 	@RequestMapping(value = "users/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON)
 	public ResponseEntity<Map<String, String>> loginAccount(@RequestBody AccountLoginDto request) {
 		Map<String, String> json = new HashMap<String, String>();
@@ -63,50 +63,39 @@ public class AccountController {
 	@ApiOperation(value = "Delete an account.")
 	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_OK, message = ""),
 			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") })
-	
+
 	@RequestMapping(value = "users/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON)
 	public ResponseEntity<AccountDeleteDto> deleteAccount(@PathVariable("id") Integer id,
 			@RequestBody AccountDeleteDto credentials) {
 		accountService.delete(id, credentials);
-		
+
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	
-	@RequestMapping(value = "users/{userId}/cart",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
-	public ResponseEntity<CartDetailsDto> getCartDetails(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader){
-		
-		CartDetailsDto cartDetailsResponse = accountService.getCartDetails(userId,requestHeader);
-		
-		return new ResponseEntity<>(cartDetailsResponse,HttpStatus.OK);
+	@RequestMapping(value = "users/{userId}/cart", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<CartDetailsDto> getCartDetails(@PathVariable Integer userId,
+			@RequestHeader HttpHeaders requestHeader) {
+
+		CartDetailsDto cartDetailsResponse = accountService.getCartDetails(userId, requestHeader);
+
+		return new ResponseEntity<>(cartDetailsResponse, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "users/{userId}/orders",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
-	public ResponseEntity<List<OrderDto>> getAllCustomerOrders(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader){
-		
-		List<OrderDto> ordersDto = accountService.getAllCustomerOrders(userId,requestHeader);
-		
-		return new ResponseEntity<>(ordersDto,HttpStatus.OK);
+
+	@RequestMapping(value = "users/{userId}/orders", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<List<OrderDto>> getAllCustomerOrders(@PathVariable Integer userId,
+			@RequestHeader HttpHeaders requestHeader) {
+
+		List<OrderDto> ordersDto = accountService.getAllCustomerOrders(userId, requestHeader);
+
+		return new ResponseEntity<>(ordersDto, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "users/{userId}/orders",method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON)
-	public ResponseEntity<OrderDto> placeOrder(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader){
-		
-		accountService.placeOrder(userId,requestHeader);
-		
+
+	@RequestMapping(value = "users/{userId}/orders", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<OrderDto> placeOrder(@PathVariable Integer userId, @RequestHeader HttpHeaders requestHeader) {
+
+		accountService.placeOrder(userId, requestHeader);
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -11,41 +11,41 @@ import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Token {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HIBERNATE_SEQ")
-	@SequenceGenerator(name = "HIBERNATE_SEQ", sequenceName = "HIBERNATE_SEQ", allocationSize=1)
+	@SequenceGenerator(name = "HIBERNATE_SEQ", sequenceName = "HIBERNATE_SEQ", allocationSize = 1)
 	private Integer id;
-	
+
 	@Column(name = "HASH")
 	private String hash;
-	
+
 	@OneToOne
 	@JoinColumn(name = "account_id")
 	private Account account;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
+	public Account getAccount() {
+		return account;
 	}
 
 	public String getHash() {
 		return hash;
 	}
 
-	public void setHash(String hash) {
-		this.hash = hash;
-	}
-
-	public Account getAccount() {
-		return account;
+	public Integer getId() {
+		return id;
 	}
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 }

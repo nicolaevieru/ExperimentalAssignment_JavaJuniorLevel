@@ -21,18 +21,16 @@ public class CartState {
 	@Column(name = "type")
 	private CartStateEnum type;
 
-	
-
 	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public CartStateEnum getType() {
 		return type;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public void setType(CartStateEnum type) {

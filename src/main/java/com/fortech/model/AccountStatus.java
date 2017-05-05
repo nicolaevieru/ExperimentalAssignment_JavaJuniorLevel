@@ -10,6 +10,7 @@ import javax.persistence.SequenceGenerator;
 
 @Entity
 public class AccountStatus {
+	
 	@Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="HIBERNATE_SEQ")
     @SequenceGenerator(name="HIBERNATE_SEQ", sequenceName="HIBERNATE_SEQ", allocationSize=1)
@@ -18,23 +19,22 @@ public class AccountStatus {
 	@Enumerated(EnumType.STRING)
 	private AccountStatusEnum status;
 	
+	public AccountStatus() {}
+	
 	public AccountStatus(AccountStatusEnum status) {
 		this.status = status;
-	}
-	public AccountStatus() {
-		
 	}
 
 	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public AccountStatusEnum getStatus() {
 		return status;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public void setStatus(AccountStatusEnum status) {
