@@ -147,7 +147,7 @@ public class VinylServiceImpl implements VinylService {
 		if(tokenRepository.findByHash(token) == null) {
 			throw new UnauthorizedException("token not valid");
 		}
-		return vinylRepository.getVinylDetails();
+		return vinylRepository.getVinylDetails(id);
 		
 	}
   

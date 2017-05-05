@@ -21,15 +21,11 @@ import com.fortech.model.dto.AccountCreateDto;
 import com.fortech.model.dto.AccountDeleteDto;
 import com.fortech.model.dto.AccountLoginDto;
 import com.fortech.model.dto.CartDetailsDto;
-import com.fortech.model.dto.OrderDto;
 import com.fortech.model.dto.CustomerListDto;
+import com.fortech.model.dto.OrderDto;
 import com.fortech.service.AccountService;
 import com.fortech.service.ItemService;
 import com.fortech.service.TokenService;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping(value = "api")
