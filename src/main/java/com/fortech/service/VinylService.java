@@ -11,7 +11,6 @@ public interface VinylService {
 
 	Vinyl save(VinylCreateDto vinyl);
 	
-	
 	VinylDetailsDto getDetails(Integer id, String token);
 
 	void addVinylToCart(Integer vinylId, Object requestBody);
@@ -21,5 +20,7 @@ public interface VinylService {
 	VinylCanOrderListDto getVinyls();
 
 	void deleteVinyl(Integer id, String token);
+  
+  void updateVinylInfo(Integer vinylId, VinylCreateDto vinylUpdateDto);
 
 }

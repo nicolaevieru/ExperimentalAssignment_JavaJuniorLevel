@@ -22,8 +22,8 @@ public class AddVinylToCartValidator extends Validator<AddVinylToCartDto> {
 
 	@Override
 	public void validate() {
-		validateId();
 		validateToken();
+		validateId();
 		validateQuantity();
 		validateStock();
 	}

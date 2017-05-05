@@ -1,6 +1,7 @@
 package com.fortech.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fortech.model.dto.AccountCreateDto;
 import com.fortech.model.dto.AccountDeleteDto;
 import com.fortech.model.dto.AccountLoginDto;
+import com.fortech.model.dto.CartDetailsDto;
+import com.fortech.model.dto.OrderDto;
 import com.fortech.model.dto.CustomerListDto;
 import com.fortech.service.AccountService;
 import com.fortech.service.ItemService;
@@ -68,12 +71,34 @@ public class AccountController {
 	public ResponseEntity<AccountDeleteDto> deleteAccount(@PathVariable("id") Integer id,
 			@RequestBody AccountDeleteDto credentials) {
 		accountService.delete(id, credentials);
+		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	@ApiOperation(value = "Get customers.")
-	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_OK, message = ""),
-			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") })
+	@RequestMapping(value = "users/{userId}/cart",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<CartDetailsDto> getCartDetails(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader){
+		
+		CartDetailsDto cartDetailsResponse = accountService.getCartDetails(userId,requestHeader);
+		
+		return new ResponseEntity<>(cartDetailsResponse,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "users/{userId}/orders",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<List<OrderDto>> getAllCustomerOrders(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader){
+		
+		List<OrderDto> ordersDto = accountService.getAllCustomerOrders(userId,requestHeader);
+		
+		return new ResponseEntity<>(ordersDto,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "users/{userId}/orders",method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON)
+	public ResponseEntity<OrderDto> placeOrder(@PathVariable Integer userId,@RequestHeader HttpHeaders requestHeader){
+		
+		accountService.placeOrder(userId,requestHeader);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "customers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<CustomerListDto> getCustomers(@RequestHeader HttpHeaders header) {
 
@@ -93,3 +118,15 @@ public class AccountController {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

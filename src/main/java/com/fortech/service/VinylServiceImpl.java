@@ -126,5 +126,42 @@ public class VinylServiceImpl implements VinylService {
 		return vinylRepository.getVinylDetails();
 		
 	}
+  
+  	@Override
+	public void updateVinylInfo(Integer vinylId, VinylCreateDto vinylUpdateDto) {
+
+		vinylUpdateDto.setTokenObject(tokenRepository.findByHash(vinylUpdateDto.getToken()));
+
+		vinylUpdateValidator.setVinylId(vinylId);
+		vinylUpdateValidator.setToValidate(vinylUpdateDto);
+		vinylUpdateValidator.validate();
+
+		Vinyl vinylToBeUpdated = vinylRepository.findOne(vinylId);
+		Vinyl oldVinyl = new Vinyl(vinylToBeUpdated);
+
+		vinylToBeUpdated.setName(vinylUpdateDto.getName());
+		vinylToBeUpdated.setCost(vinylUpdateDto.getCost());
+		vinylToBeUpdated.setStock(vinylUpdateDto.getStock());
+
+		vinylRepository.save(vinylToBeUpdated);
+		updateAllCarts(oldVinyl,vinylToBeUpdated);
+	}
+	
+	private void updateAllCarts(Vinyl oldVinyl,Vinyl newVinyl) {
+		List<Item> updatedItems;
+		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIV);
+		
+		updatedItems = itemRepository.findByVinylAndCart_CartState(newVinyl, activeCartState);
+
+		for (Item item : updatedItems) {
+			Double cartOldCost = item.getCart().getCost();
+			Double oldItemCost = item.getQuantity() * oldVinyl.getCost();
+			Double newItemCost = item.getQuantity() * newVinyl.getCost();
+			
+			item.getCart().setCost((cartOldCost - oldItemCost) + newItemCost);
+		}
+		
+		itemRepository.save(updatedItems);
+	}
 
 }
