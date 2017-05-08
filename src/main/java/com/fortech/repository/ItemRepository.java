@@ -18,7 +18,7 @@ public interface ItemRepository extends CrudRepository<Item, Integer> {
 	List<Item>findByVinyl(Vinyl vinyl);
 	@Query("FROM Item i LEFT JOIN i.cart.cartState cs where (i.id =:id AND cs.type = com.fortech.model.CartStateEnum.ACTIVE)")
 	Item findByIdInActiveCart(@Param("id") Integer id);
-  List<Item> findByCart(Cart cart);
+	List<Item> findByCart(Cart cart);
 	List<Item> findByVinylAndCart_CartState(Vinyl vinyl,CartState cartstate);
 	Item findByVinylAndCart(Vinyl vinyl,Cart cart); 
 
