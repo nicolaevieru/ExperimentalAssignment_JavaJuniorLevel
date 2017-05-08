@@ -3,7 +3,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
-	
+
 	<changeSet id="populateH2TestDatabase" author="cristi">
 		<insert tableName="ACCOUNT_STATUS">
 			<column name="id" valueNumeric="1" />
@@ -13,6 +13,7 @@
 			<column name="id" valueNumeric="2" />
 			<column name="STATUS" value="DELETED" />
 		</insert>
+
 		<insert tableName="ACCOUNT_TYPE">
 			<column name="id" valueNumeric="1" />
 			<column name="type" value="STORE_MANAGER" />
@@ -21,12 +22,13 @@
 			<column name="id" valueNumeric="2" />
 			<column name="type" value="CUSTOMER" />
 		</insert>
+
 		<insert tableName="ACCOUNT">
 			<column name="id" valueNumeric="1" />
 			<column name="FIRST_NAME" value="Manager" />
 			<column name="LAST_NAME" value="Manager" />
 			<column name="EMAIL" value="manager@email.com" />
-			<column name="PASSWORD_HASH" value="password" />
+			<column name="PASSWORD_HASH" value="passwordManager" />
 			<column name="TYPE_ID" valueNumeric="1" />
 			<column name="STATUS_ID" valueNumeric="1" />
 		</insert>
@@ -35,6 +37,22 @@
 			<column name="HASH" value="123456" />
 			<column name="ACCOUNT_ID" valueNumeric="1" />
 		</insert>
+
+		<insert tableName="ACCOUNT">
+			<column name="id" valueNumeric="2" />
+			<column name="FIRST_NAME" value="Customer" />
+			<column name="LAST_NAME" value="Customer" />
+			<column name="EMAIL" value="customer@email.com" />
+			<column name="PASSWORD_HASH" value="passwordCustomer" />
+			<column name="TYPE_ID" valueNumeric="2" />
+			<column name="STATUS_ID" valueNumeric="1" />
+		</insert>
+		<insert tableName="TOKEN">
+			<column name="id" valueNumeric="2" />
+			<column name="HASH" value="12345" />
+			<column name="ACCOUNT_ID" valueNumeric="2" />
+		</insert>
+
 		<insert tableName="VINYL">
 			<column name="id" valueNumeric="1000" />
 			<column name="NAME" value="Metallica" />
@@ -42,6 +60,14 @@
 			<column name="STOCK" valueNumeric="100" />
 			<column name="IS_AVAILABLE" valueNumeric="1" />
 		</insert>
+		<insert tableName="VINYL">
+			<column name="id" valueNumeric="1001" />
+			<column name="NAME" value="Pink Floyd" />
+			<column name="COST" valueNumeric="100" />
+			<column name="STOCK" valueNumeric="100" />
+			<column name="IS_AVAILABLE" valueNumeric="1" />
+		</insert>
+
 	</changeSet>
 
 </databaseChangeLog>
