@@ -34,26 +34,17 @@ public class TestTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
-		
+
 	@Test
-	 public void testMockito() throws Exception{
+	public void testMockito() {
 		Map<String, String> map = new HashMap<>();
-		map.put("token", "11111");
-		map.put("name","ion");
-		map.put("cost", "12");
-		map .put("stock", "12");
-		
-		/*get("api/vinyls/");*/
-		String json = new ObjectMapper().writeValueAsString(map);
-		
-		given().auth().basic("admin", "secret").port(9000).
-		contentType(ContentType.JSON).
-		body(map).when().post("/api/vinyls").then().
-		assertThat().statusCode(201);
-	/*	get("/vinyls").then().body("lotto.lottoid", equalTo(5));
-	  
-		  this.mockMvc.perform(post("/api/vinyls").contentType(MediaType.APPLICATION_JSON).content(json))
-		     .andExpect(status().isCreated());*/
-	 }
+		map.put("token", "123456");
+		map.put("name", "ion");
+		map.put("cost", "aa");
+		map.put("stock", "12");
+
+		given().auth().basic("admin", "secret").port(9000).contentType(ContentType.JSON).body(map).when()
+				.post("/api/vinyls").then().assertThat().statusCode(201);
+	}
 
 }

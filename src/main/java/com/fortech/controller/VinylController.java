@@ -37,11 +37,6 @@ public class VinylController {
 	@Autowired
 	private TokenService tokenService;
 
-	@ApiOperation(value = "Create and store a vinyl in the database.")
-	@ApiResponses(value = { @ApiResponse(code = org.apache.http.HttpStatus.SC_CREATED, message = ""),
-			@ApiResponse(code = org.apache.http.HttpStatus.SC_BAD_REQUEST, message = "If the json request fields are not valid.") }
-
-	)
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public ResponseEntity<Vinyl> createVinyl(@RequestBody VinylCreateDto vinylCreateDto) {
 

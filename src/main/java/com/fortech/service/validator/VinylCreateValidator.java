@@ -27,11 +27,11 @@ public class VinylCreateValidator extends Validator<VinylCreateDto> {
 	}
 
 	protected void validateToken() {
-		if (toValidate.getToken() == null) {
+		if (toValidate.getTokenObject() == null) {
 			throw new BadRequestException("Invalid token.Log in or create an account.");
 		}
 	}
-
+	
 	protected void validateManagerToken() {
 		if (toValidate.getTokenObject().getAccount().getAccountType().getType() != AccountTypeEnum.STORE_MANAGER) {
 			throw new UnauthorizedException("Only a manager can add new vinyls to the store.");
