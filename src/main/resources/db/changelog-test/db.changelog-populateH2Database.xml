@@ -24,7 +24,7 @@
 		</insert>
 
 		<insert tableName="ACCOUNT">
-			<column name="id" valueNumeric="1" />
+			<column name="id" valueNumeric="1000" />
 			<column name="FIRST_NAME" value="Manager" />
 			<column name="LAST_NAME" value="Manager" />
 			<column name="EMAIL" value="manager@email.com" />
@@ -33,13 +33,13 @@
 			<column name="STATUS_ID" valueNumeric="1" />
 		</insert>
 		<insert tableName="TOKEN">
-			<column name="id" valueNumeric="1" />
+			<column name="id" valueNumeric="1000" />
 			<column name="HASH" value="123456" />
-			<column name="ACCOUNT_ID" valueNumeric="1" />
+			<column name="ACCOUNT_ID" valueNumeric="1000" />
 		</insert>
 
 		<insert tableName="ACCOUNT">
-			<column name="id" valueNumeric="2" />
+			<column name="id" valueNumeric="2000" />
 			<column name="FIRST_NAME" value="Customer" />
 			<column name="LAST_NAME" value="Customer" />
 			<column name="EMAIL" value="customer@email.com" />
@@ -48,9 +48,9 @@
 			<column name="STATUS_ID" valueNumeric="1" />
 		</insert>
 		<insert tableName="TOKEN">
-			<column name="id" valueNumeric="2" />
+			<column name="id" valueNumeric="2000" />
 			<column name="HASH" value="12345" />
-			<column name="ACCOUNT_ID" valueNumeric="2" />
+			<column name="ACCOUNT_ID" valueNumeric="2000" />
 		</insert>
 
 		<insert tableName="VINYL">

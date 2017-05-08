@@ -24,6 +24,9 @@ public class LoginValidator extends Validator<AccountLoginDto> {
 	}
 
 	private void validatePassword() {
+		if(this.toValidate.getPassword() == null) {
+			throw new BadRequestException("Invalid email or password");
+		}
 		PasswordEncoder encoder = new PasswordEncoder();
 		if (!encoder.getEncoder().matches(this.toValidate.getPassword(), account.getPasswordHash())) {
 			throw new BadRequestException("Invalid email or password");
