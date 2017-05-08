@@ -33,17 +33,11 @@ public class GetCustomersIT extends AbstractTest {
 	
 	@Test
 	public void testGetCustomersWithValidTokenReturnsOK() {
-		Response response =send().get("/api/customers");
-		
+		Response response =send().get("/api/customers");		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
-
 		
 	}
-	
-	/*@Test
-	public void testGetCustomersWithCustomerTokenReturns403() {
-	}
-	*/
+
 	private RequestSpecification send() {
 		return given().auth().basic(USERNAME, PASSWORD).port(PORT).header(new Header("token", "123456"));
 	}
