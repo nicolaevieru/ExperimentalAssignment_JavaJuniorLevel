@@ -1,6 +1,6 @@
 package com.fortech.controller;
 
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+/*import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;*/
 
 /*import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;*/
@@ -24,6 +24,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import static io.restassured.RestAssured.*;
+import static io.restassured.matcher.RestAssuredMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fortech.repository.VinylRepository;
@@ -67,15 +70,18 @@ public class TestTest {
 	@Test
 	 public void testMockito() throws Exception{
 		Map<String, String> map = new HashMap<>();
-		map.put("token", "-513879925");
+		map.put("token", "11111");
 		map.put("name","ion");
 		map.put("cost", "12");
-		map .put("stock", "100");
+		map .put("stock", "12");
 		
 		/*get("api/vinyls/");*/
 		String json = new ObjectMapper().writeValueAsString(map);
 		
-		given().standaloneSetup(vinylController).contentType(ContentType.JSON).body(map).when().post("/api/vinyls").then().assertThat().statusCode(201);
+		given().auth().basic("admin", "secret").port(9000).
+		contentType(ContentType.JSON).
+		body(map).when().post("/api/vinyls").then().
+		assertThat().statusCode(201);
 	/*	get("/vinyls").then().body("lotto.lottoid", equalTo(5));
 	  
 		  this.mockMvc.perform(post("/api/vinyls").contentType(MediaType.APPLICATION_JSON).content(json))
