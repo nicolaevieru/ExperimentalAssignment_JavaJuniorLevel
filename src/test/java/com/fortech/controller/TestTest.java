@@ -1,5 +1,7 @@
 package com.fortech.controller;
 
+import static io.restassured.RestAssured.given;
+
 /*import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;*/
 
 /*import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -8,12 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,20 +19,13 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static io.restassured.RestAssured.*;
-import static io.restassured.matcher.RestAssuredMatchers.*;
-import static org.hamcrest.Matchers.*;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fortech.repository.VinylRepository;
-import com.fortech.service.VinylService;
 
 import io.restassured.http.ContentType;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
@@ -43,30 +34,7 @@ public class TestTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
-
-	@Mock
-	private VinylService vinylService;
-
-	@InjectMocks
-	private VinylController vinylController;
-
-	private MockMvc mockMvc;
-
-	@Autowired
-	VinylRepository vinylRepo;
-
-	@Before
-	public void setup() {
-		MockitoAnnotations.initMocks(this);
-
-		this.mockMvc = MockMvcBuilders.standaloneSetup(vinylController).build();
-	}
-
-	/*
-	 * @Test public void test() { Vinyl vinyl = new Vinyl();
-	 * vinyl.setCost(100.0); vinyl.setName("bbbb"); vinyl.setStock(100);
-	 * vinylRepo.save(vinyl); }
-	 */
+		
 	@Test
 	 public void testMockito() throws Exception{
 		Map<String, String> map = new HashMap<>();
