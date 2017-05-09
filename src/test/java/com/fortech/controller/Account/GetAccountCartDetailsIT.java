@@ -15,8 +15,6 @@ import io.restassured.response.Response;
 public class GetAccountCartDetailsIT extends AbstractTest{
 	
 	private static final String EXISTING_CUSTOMER_CART_URL = "api/users/1001/cart";
-	private static final String EXISTING_CUSTOMER_TOKEN = "12345";
-	private static final String EXISTING_MANAGER_TOKEN = "12345";
 	private static final String INVALID_TOKEN = "5555";
 	
 	@Test
