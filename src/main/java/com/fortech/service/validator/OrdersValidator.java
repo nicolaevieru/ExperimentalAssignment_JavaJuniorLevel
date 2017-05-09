@@ -20,7 +20,7 @@ public class OrdersValidator extends Validator<Token> {
 	@Override
 	public void validate() {
 		validateToken();
-		if (toValidate.getAccount().getId() != userId) {
+		if (!toValidate.getAccount().getId().equals(userId)) {
 			validateIsManager();
 		}		
 	}
