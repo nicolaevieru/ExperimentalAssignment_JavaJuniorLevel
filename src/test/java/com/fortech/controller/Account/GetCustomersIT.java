@@ -21,24 +21,25 @@ import io.restassured.response.Response;
 
 public class GetCustomersIT extends AbstractTest {
 	
+	private static final String URL = "api/customers";
 	@Autowired
 	AccountService accountService;
 	
 	@Test
 	public void testGetCustomersWithValidTokenReturnsOK() {
-		Response response =sendGetRequest().get("/api/customers");		
+		Response response =sendGetRequest(URL);		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 	}
 	
 	@Test
 	public void testGetCustomerReturnsOriginalCustomer() {
-		sendGetRequest().get("api/customers").then().assertThat().body("customers.email", hasItem("customer@email.com"));
+		sendGetRequest(URL).then().assertThat().body("customers.email", hasItem("customer@email.com"));
 	}
 	
 	@Test
 	public void testGetCustomersWithInvalidTokenReturnsUnauthorized() {
 		requestHeader = new Header("token","11111");
-		Response response =sendGetRequest().get("/api/customers");		
+		Response response =sendGetRequest(URL);		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
 	}
 	
@@ -62,7 +63,7 @@ public class GetCustomersIT extends AbstractTest {
 		testAccount.setPasswordHash("password");
 		accountService.save(testAccount);
 		
-		sendGetRequest().get("api/customers").then().assertThat().body("customers.email", hasItem("newcust@email.com"));
+		sendGetRequest(URL).then().assertThat().body("customers.email", hasItem("newcust@email.com"));
 	}
 
 }

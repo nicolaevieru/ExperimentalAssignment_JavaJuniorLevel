@@ -28,16 +28,15 @@ public abstract class AbstractTest {
 	protected static final String USERNAME = "admin";
 	protected static final String PASSWORD = "secret";
 	protected Header requestHeader = new Header("token", "123456");
-	protected Map<String, String> requestJSON = new HashMap<String, String>();
+	protected Map<String, String> requestJson = new HashMap<String, String>();
 	
-	protected RequestSpecification sendGetRequest() {
-		return given().auth().basic(USERNAME, PASSWORD).port(PORT).header(requestHeader);
+	protected Response sendGetRequest(String URL) {
+		return given().auth().basic(USERNAME, PASSWORD).port(PORT).header(requestHeader).get(URL);
 	}
 	
 	protected Response sendPostRequest(String URL){
 		RequestSpecification request = given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON);
-		
-		return request.body(requestJSON).post(URL);
+		return request.body(requestJson).post(URL);
 	}
 
 }
