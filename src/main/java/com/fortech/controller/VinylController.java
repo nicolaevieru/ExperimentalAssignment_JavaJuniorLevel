@@ -23,10 +23,6 @@ import com.fortech.model.dto.VinylInventoryListDto;
 import com.fortech.service.TokenService;
 import com.fortech.service.VinylService;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-
 @RestController
 @RequestMapping("/api/vinyls")
 public class VinylController {
