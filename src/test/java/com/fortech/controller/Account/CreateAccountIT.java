@@ -1,66 +1,68 @@
 package com.fortech.controller.Account;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.fortech.controller.AbstractTest;
-
-import io.restassured.http.ContentType;
-
 import static io.restassured.RestAssured.given;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.http.HttpStatus;
+
+import com.fortech.controller.AbstractTest;
+
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
 
 public class CreateAccountIT extends AbstractTest {
 	
 	private Map<String, String> requestJson;
 	
 	@Test
-	public void testPostWithValidDataReturns201() {
+	public void testPostWithValidDataReturnsCreated() {
 
 		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-				.post("/api/users").then().assertThat().statusCode(201);
+				.post("/api/users").then().assertThat().statusCode(HttpStatus.CREATED.value());
 	}
 	
 	@Test
-	public void testPostWithTooShortFirstNameReturns400() {
+	public void testPostWithTooShortFirstNameReturnsBadRequest() {
 		requestJson.put("firstName", "");
 		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users").then().assertThat().statusCode(400);
+		.post("/api/users").then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
 	@Test
-	public void testPostWithTooShortLastNameReturns400() {
+	public void testPostWithTooShortLastNameReturnsBadRequest() {
 		requestJson.put("lastName", "");
 		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users").then().assertThat().statusCode(400);
+		.post("/api/users").then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
 	@Test
-	public void testPostWithInvalidPasswordlReturns400() {
+	public void testPostWithInvalidPasswordlReturnsBadRequest() {
 		requestJson.put("password", "weakpassword");
 		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users").then().assertThat().statusCode(400);
+		.post("/api/users").then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
 	@Test
-	public void testPostWithEmailWithoutAtSignReturns400() {
+	public void testPostWithEmailWithoutAtSignReturnsBadRequest() {
 		requestJson.put("email", "emailwithoutat");
 		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users").then().assertThat().statusCode(400);
+		.post("/api/users").then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
-	public void testPostWithNullFirstNameReturns400() {
+	public void testPostWithNullFirstNameReturnsBadRequest() {
 		requestJson.put("firstName", null);
 		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users").then().assertThat().statusCode(400);
+		.post("/api/users").then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
-	public void testPostWithNullLastNameReturns400() {
+	public void testPostWithNullLastNameReturnsBadRequest() {
 		requestJson.put("lastName", null);
 		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users").then().assertThat().statusCode(400);
+		.post("/api/users").then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
 	@Before
@@ -71,6 +73,7 @@ public class CreateAccountIT extends AbstractTest {
 		requestJson.put("email", "test@email.com");
 		requestJson.put("password", "P@ssword123");
 	}
+	
 	
 	
 }
