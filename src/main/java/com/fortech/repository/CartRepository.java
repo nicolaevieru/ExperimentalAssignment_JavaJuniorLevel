@@ -2,7 +2,9 @@ package com.fortech.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.fortech.model.Account;
@@ -15,4 +17,7 @@ public interface CartRepository extends CrudRepository<Cart, Integer> {
 	Cart findByAccountAndCartState(Account account,CartState cartState);
 	List<Cart> findByCartState(CartState cartState);
 	
+	@Query("FROM Cart c WHERE c.account.id = :id and c.cartState.id = :cartStateId")
+	Cart findByAccountIdAndCartStateId(@Param("id") Integer id,@Param("cartStateId") Integer cartStateId);
+
 }
