@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import com.fortech.model.AccountTypeEnum;
 import com.fortech.model.Token;
 import com.fortech.service.TokenService;
-import com.fortech.service.exception.BadRequestException;
 import com.fortech.service.exception.ForbiddenException;
+import com.fortech.service.exception.UnauthorizedException;
 
 @Component
 public class CartDetailsValidator extends Validator<Token> {
@@ -20,20 +20,20 @@ public class CartDetailsValidator extends Validator<Token> {
 	@Override
 	public void validate() {
 		validateToken();
-		if (toValidate.getAccount().getId() != userId) {
+		if (!toValidate.getAccount().getId().equals(userId)) {
 			validateIsManager();
 		}		
 	}
 	
 	private void validateToken() {
 		if (toValidate == null) {
-			throw new BadRequestException("Invalid token");
+			throw new UnauthorizedException("Invalid token");
 		}
 	}
 
 	private void validateIsManager() {
 		if (toValidate.getAccount().getAccountType().getType() != AccountTypeEnum.STORE_MANAGER) {
-			throw new ForbiddenException("Not authorised!");
+			throw new ForbiddenException("Invalid token");
 		}
 	}
 

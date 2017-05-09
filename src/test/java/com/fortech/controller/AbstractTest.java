@@ -31,12 +31,17 @@ public abstract class AbstractTest {
 	protected Map<String, String> requestJson = new HashMap<String, String>();
 	
 	protected Response sendGetRequest(String URL) {
-		return given().auth().basic(USERNAME, PASSWORD).port(PORT).header(requestHeader).get(URL);
+		return given().auth().basic(USERNAME, PASSWORD).port(PORT).header(requestHeader).contentType(ContentType.JSON.toString()).get(URL);
 	}
 	
 	protected Response sendPostRequest(String URL){
 		RequestSpecification request = given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON);
 		return request.body(requestJson).post(URL);
+	}
+	
+	protected Response sendDeleteRequest(String URL){
+		RequestSpecification request = given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON);
+		return request.body(requestJson).delete(URL);
 	}
 
 }

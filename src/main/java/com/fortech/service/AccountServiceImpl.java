@@ -33,6 +33,7 @@ import com.fortech.repository.CartRepository;
 import com.fortech.repository.CartStateRepository;
 import com.fortech.repository.ItemRepository;
 import com.fortech.service.exception.ForbiddenException;
+import com.fortech.service.exception.UnauthorizedException;
 import com.fortech.service.validator.AccountValidator;
 import com.fortech.service.validator.CartDetailsValidator;
 import com.fortech.service.validator.DeleteValidator;
@@ -157,6 +158,10 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public CartDetailsDto getCartDetails(Integer userId, HttpHeaders requestHeader) {
+		
+		if(requestHeader.getFirst("token") == null) {
+			throw new UnauthorizedException("token not valid!");
+		}
 
 		Token token = tokenService.findByHash(requestHeader.getFirst("token"));
 

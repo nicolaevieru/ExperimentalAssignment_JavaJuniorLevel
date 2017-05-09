@@ -1,7 +1,6 @@
 package com.fortech.controller.Account;
 
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.hasItem;
 
 import org.junit.Test;
@@ -17,18 +16,18 @@ import com.fortech.model.AccountTypeEnum;
 import com.fortech.service.AccountService;
 
 import io.restassured.http.Header;
-import io.restassured.response.Response;
 
 public class GetCustomersIT extends AbstractTest {
 	
 	private static final String URL = "api/customers";
+	private static final String INVALID_TOKEN = "1111";
+	
 	@Autowired
 	AccountService accountService;
 	
 	@Test
 	public void testGetCustomersWithValidTokenReturnsOK() {
-		Response response =sendGetRequest(URL);		
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+		sendGetRequest(URL).then().assertThat().statusCode(HttpStatus.OK.value());
 	}
 	
 	@Test
@@ -38,18 +37,17 @@ public class GetCustomersIT extends AbstractTest {
 	
 	@Test
 	public void testGetCustomersWithInvalidTokenReturnsUnauthorized() {
-		requestHeader = new Header("token","11111");
-		Response response =sendGetRequest(URL);		
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+		requestHeader = new Header("token",INVALID_TOKEN);
+		sendGetRequest(URL).then().assertThat().statusCode(HttpStatus.UNAUTHORIZED.value());		
 	}
 	
 	@Test
 	public void testGetCustomersWithNoTokenInHeaderReturnsUnauthorized() {
-		given().auth().basic(USERNAME, PASSWORD).port(PORT).get("/api/customers")
-															.then()
-															.assertThat()
-															.statusCode(HttpStatus.UNAUTHORIZED.value());
-
+		given().auth().basic(USERNAME, PASSWORD)
+						.port(PORT).get(URL)
+						.then()
+						.assertThat()
+						.statusCode(HttpStatus.UNAUTHORIZED.value());
 	}
 	
 	@Test

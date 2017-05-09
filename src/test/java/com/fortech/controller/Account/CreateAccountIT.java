@@ -2,6 +2,7 @@ package com.fortech.controller.Account;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.HashMap;
 
@@ -22,8 +23,8 @@ public class CreateAccountIT extends AbstractTest {
 	
 	@Test
 	public void testPostWithValidDataReturnsCreatedAndUserIsCreated() {
-		/*sendPostRequest(URL).then().assertThat().statusCode(HttpStatus.CREATED.value()).and()assertThat(accountService.findByEmail(this.requestJson.get("email")), is(notNullValue()));
-		sendPostRequest(URL).then().assertThat().statusCode(HttpStatus.CREATED.value()).and().assertThat().a*/
+		sendPostRequest(URL).then().assertThat().statusCode(HttpStatus.CREATED.value());
+		assertThat(accountService.findByEmail(this.requestJson.get("email")), is(notNullValue()));
 	}
 	
 	@Test
@@ -60,11 +61,6 @@ public class CreateAccountIT extends AbstractTest {
 	public void testPostWithNullLastNameReturnsBadRequest() {
 		requestJson.put("lastName", null);
 		sendPostRequest(URL).then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
-	}
-	
-	@Test
-	public void testThatNewAccountIsPersisted() {
-		
 	}
 	
 	@Before
