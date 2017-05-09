@@ -1,5 +1,7 @@
 package com.fortech.service;
 
+import java.util.Map;
+
 import com.fortech.model.Token;
 import com.fortech.model.Vinyl;
 import com.fortech.model.dto.VinylCanOrderListDto;
@@ -13,7 +15,7 @@ public interface VinylService {
 	
 	VinylDetailsDto getDetails(Integer id, String token);
 
-	void addVinylToCart(Integer vinylId, Object requestBody);
+	void addVinylToCart(Integer vinylId, Map<String,String> requestBody);
 
 	VinylInventoryListDto getInventory(Token token);
 	

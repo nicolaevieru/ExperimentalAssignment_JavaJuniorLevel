@@ -71,7 +71,7 @@ public class VinylServiceImpl implements VinylService {
 	}
 
 	@Override
-	public void addVinylToCart(Integer vinylId, Object requestBody) {
+	public void addVinylToCart(Integer vinylId, Map<String,String> requestBody) {
 
 		AddVinylToCartDto vinylToCartDto = processRequestBody(vinylId, requestBody);
 
@@ -110,9 +110,11 @@ public class VinylServiceImpl implements VinylService {
 		return cartRepository.findByAccountAndCartState(vinylToCartDto.getToken().getAccount(), cartState);
 	}
 
-	private AddVinylToCartDto processRequestBody(Integer vinylId, Object requestBody) {
-		int quantity = Integer.parseInt((String) ((Map) requestBody).get("quantity"));
-		String tokenHash = (String) ((Map) requestBody).get("token");
+	private AddVinylToCartDto processRequestBody(Integer vinylId, Map<String,String> requestBody) {
+		vinylToCartValidator.validateQuantityIsInteger(requestBody.get("quantity"));
+		
+		int quantity = Integer.parseInt(requestBody.get("quantity"));
+		String tokenHash = requestBody.get("token");
 		Token token = tokenRepository.findByHash(tokenHash);
 
 		return new AddVinylToCartDto(vinylId, quantity, token);

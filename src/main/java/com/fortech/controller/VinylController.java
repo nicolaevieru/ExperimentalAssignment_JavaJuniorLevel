@@ -47,8 +47,8 @@ public class VinylController {
 	}
 
 	@RequestMapping(value = "{vinylId}/cart", method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Integer vinylId, @RequestBody Object requestBody) {
-
+	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Integer vinylId, @RequestBody Map<String,String> requestBody) {
+		
 		vinylService.addVinylToCart(vinylId, requestBody);
 
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);

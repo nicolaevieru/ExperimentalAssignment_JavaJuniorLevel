@@ -1,5 +1,6 @@
 package com.fortech.service.validator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,6 +52,12 @@ public class AddVinylToCartValidator extends Validator<AddVinylToCartDto> {
 	private void validateToken() {
 		if (toValidate.getToken() == null) {
 			throw new BadRequestException("Invalid token.Log in or create an account.");
+		}
+	}
+	
+	public void validateQuantityIsInteger(String quantity){
+		if(!StringUtils.isNumeric(quantity)){
+			throw new BadRequestException("Quantity should be a numeric number.");
 		}
 	}
 

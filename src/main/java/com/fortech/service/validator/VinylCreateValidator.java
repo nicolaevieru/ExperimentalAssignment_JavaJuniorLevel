@@ -39,20 +39,20 @@ public class VinylCreateValidator extends Validator<VinylCreateDto> {
 	}
 
 	protected void validateName() {
-		if (toValidate.getName() == null) {
+		if (toValidate.getName() == null || toValidate.getName() == "") {
 			throw new BadRequestException("A name must be provided for the vinyl.");
 		}
 	}
 
 	protected void validateCost() {
-		if (toValidate.getCost() < 0.0) {
-			throw new BadRequestException("Cost can't be less than zero.");
+		if (toValidate.getCost() < 0.0 || toValidate.getCost() == 0) {
+			throw new BadRequestException("Cost can't be null or less than zero.");
 		}
 	}
 
 	protected void validateStock() {
-		if (toValidate.getStock() < 0) {
-			throw new BadRequestException("Stock can't be less than zero.");
+		if (toValidate.getStock() < 0 || toValidate.getStock() == 0) {
+			throw new BadRequestException("Stock can't be null or less than zero.");
 		}
 	}
 
