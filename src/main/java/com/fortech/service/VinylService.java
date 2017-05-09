@@ -19,7 +19,7 @@ public interface VinylService {
 
 	VinylInventoryListDto getInventory(Token token);
 	
-	VinylCanOrderListDto getVinyls();
+	VinylCanOrderListDto getVinyls(String token);
 
 	void deleteVinyl(Integer id, String token);
   

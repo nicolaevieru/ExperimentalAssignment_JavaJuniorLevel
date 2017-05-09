@@ -20,21 +20,15 @@ public class AddVinylToCartIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedRequestJSONIsValidReturnAccepted() {
-		populateRequestJSON("12345", "1");
+		Double cartCostBeforeRequest = cartRepository.findByAccountIdAndCartStateId(1001, 1).getCost();
+
+		populateRequestJSON(EXISTING_CUSTOMER_TOKEN, "1");
 		Response response = sendPostRequest(URL);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SC_ACCEPTED);
-	}
-
-	@Test
-	public void testWhenProvidedRequestJSONIsValidModifyCartCostInDatabase() {
-		Double cartCostBeforeRequest = cartRepository.findByAccountIdAndCartStateId(1001, 1).getCost();
-
-		populateRequestJSON("12345", "1");
-		sendPostRequest(URL);
-
 		assertThat(cartRepository.findByAccountIdAndCartStateId(1001, 1).getCost())
-				.isGreaterThan(cartCostBeforeRequest);
+		.isGreaterThan(cartCostBeforeRequest);
+
 	}
 
 	@Test
@@ -56,7 +50,7 @@ public class AddVinylToCartIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedQuantityInRequestJsonIsLessThanZeroReturnBadRequest() {
-		populateRequestJSON("12345", "-1");
+		populateRequestJSON(EXISTING_CUSTOMER_TOKEN, "-1");
 
 		Response response = sendPostRequest(URL);
 
@@ -65,7 +59,7 @@ public class AddVinylToCartIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedQuantityInRequestJsonIsNotNumericReturnBadRequest() {
-		populateRequestJSON("12345", "asdf");
+		populateRequestJSON(EXISTING_CUSTOMER_TOKEN, "asdf");
 
 		Response response = sendPostRequest(URL);
 
@@ -74,7 +68,7 @@ public class AddVinylToCartIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedQuantityInRequestJsonIsNullReturnBadRequest() {
-		populateRequestJSON("12345", "");
+		populateRequestJSON(EXISTING_CUSTOMER_TOKEN, "");
 
 		Response response = sendPostRequest(URL);
 
@@ -83,7 +77,7 @@ public class AddVinylToCartIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedVinylIdInRequestUrlDoesNotExistInDatabaseReturnBadRequest() {
-		populateRequestJSON("12345", "1");
+		populateRequestJSON(EXISTING_CUSTOMER_TOKEN, "1");
 
 		Response response = sendPostRequest("/api/vinyls/9999999/cart");
 
@@ -92,7 +86,7 @@ public class AddVinylToCartIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedQuantityInRequestJsonIsBiggerThanAvailableStockReturnBadRequest() {
-		populateRequestJSON("12345", "100000");
+		populateRequestJSON(EXISTING_CUSTOMER_TOKEN, "100000");
 
 		Response response = sendPostRequest(URL);
 
@@ -100,8 +94,8 @@ public class AddVinylToCartIT extends AbstractTest {
 	}
 
 	private void populateRequestJSON(String token, String quantity) {
-		requestJSON.put("token", token);
-		requestJSON.put("quantity", quantity);
+		requestJson.put("token", token);
+		requestJson.put("quantity", quantity);
 	}
 
 }

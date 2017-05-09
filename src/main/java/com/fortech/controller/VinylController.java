@@ -50,7 +50,7 @@ public class VinylController {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
-	@RequestMapping(value = "inventory", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON)
+	@RequestMapping(value = "inventory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<VinylInventoryListDto> getInventory(@RequestHeader HttpHeaders header) {
 
 		return new ResponseEntity<>(vinylService.getInventory(tokenService.findByHash(header.getFirst("token"))),
@@ -60,7 +60,7 @@ public class VinylController {
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<VinylCanOrderListDto> getVinyls(@RequestHeader HttpHeaders header) {
 
-		return new ResponseEntity<>(vinylService.getVinyls(), HttpStatus.OK);
+		return new ResponseEntity<>(vinylService.getVinyls(header.getFirst("token")), HttpStatus.OK);
 
 	}
 
@@ -89,4 +89,5 @@ public class VinylController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	
 }

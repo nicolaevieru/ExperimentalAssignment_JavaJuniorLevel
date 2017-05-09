@@ -22,6 +22,7 @@ import com.fortech.repository.CartStateRepository;
 import com.fortech.repository.ItemRepository;
 import com.fortech.repository.TokenRepository;
 import com.fortech.repository.VinylRepository;
+import com.fortech.service.exception.BadRequestException;
 import com.fortech.service.exception.NotFoundException;
 import com.fortech.service.exception.UnauthorizedException;
 import com.fortech.service.validator.AddVinylToCartValidator;
@@ -29,7 +30,6 @@ import com.fortech.service.validator.IsManagerValidator;
 import com.fortech.service.validator.Validator;
 import com.fortech.service.validator.VinylCreateValidator;
 import com.fortech.service.validator.VinylUpdateValidator;;
-
 
 @Service("vinylService")
 public class VinylServiceImpl implements VinylService {
@@ -45,7 +45,7 @@ public class VinylServiceImpl implements VinylService {
 
 	@Autowired
 	private ItemRepository itemRepository;
-	
+
 	@Autowired
 	private CartStateRepository cartStateRepository;
 
@@ -54,7 +54,7 @@ public class VinylServiceImpl implements VinylService {
 
 	@Autowired
 	private VinylCreateValidator vinylCreateValidator;
-	
+
 	@Autowired
 	private VinylUpdateValidator vinylUpdateValidator;
 
@@ -71,7 +71,7 @@ public class VinylServiceImpl implements VinylService {
 	}
 
 	@Override
-	public void addVinylToCart(Integer vinylId, Map<String,String> requestBody) {
+	public void addVinylToCart(Integer vinylId, Map<String, String> requestBody) {
 
 		AddVinylToCartDto vinylToCartDto = processRequestBody(vinylId, requestBody);
 
@@ -110,9 +110,9 @@ public class VinylServiceImpl implements VinylService {
 		return cartRepository.findByAccountAndCartState(vinylToCartDto.getToken().getAccount(), cartState);
 	}
 
-	private AddVinylToCartDto processRequestBody(Integer vinylId, Map<String,String> requestBody) {
+	private AddVinylToCartDto processRequestBody(Integer vinylId, Map<String, String> requestBody) {
 		vinylToCartValidator.validateQuantityIsInteger(requestBody.get("quantity"));
-		
+
 		int quantity = Integer.parseInt(requestBody.get("quantity"));
 		String tokenHash = requestBody.get("token");
 		Token token = tokenRepository.findByHash(tokenHash);
@@ -128,7 +128,12 @@ public class VinylServiceImpl implements VinylService {
 	}
 
 	@Override
-	public VinylCanOrderListDto getVinyls() {
+	public VinylCanOrderListDto getVinyls(String token) {
+
+		if (tokenRepository.findByHash(token) == null) {
+			throw new UnauthorizedException("token not valid");
+		}
+
 		return new VinylCanOrderListDto(vinylRepository.getVinyls());
 	}
 
@@ -146,14 +151,18 @@ public class VinylServiceImpl implements VinylService {
 
 	@Override
 	public VinylDetailsDto getDetails(Integer id, String token) {
-		if(tokenRepository.findByHash(token) == null) {
+		if (tokenRepository.findByHash(token) == null) {
 			throw new UnauthorizedException("token not valid");
 		}
+
+		if (vinylRepository.findOne(id) == null) {
+			throw new BadRequestException("Vinyl id invalid!");
+		}
 		return vinylRepository.getVinylDetails(id);
-		
+
 	}
-  
-  	@Override
+
+	@Override
 	public void updateVinylInfo(Integer vinylId, VinylCreateDto vinylUpdateDto) {
 
 		vinylUpdateDto.setTokenObject(tokenRepository.findByHash(vinylUpdateDto.getToken()));
@@ -170,23 +179,23 @@ public class VinylServiceImpl implements VinylService {
 		vinylToBeUpdated.setStock(vinylUpdateDto.getStock());
 
 		vinylRepository.save(vinylToBeUpdated);
-		updateAllCarts(oldVinyl,vinylToBeUpdated);
+		updateAllCarts(oldVinyl, vinylToBeUpdated);
 	}
-	
-	private void updateAllCarts(Vinyl oldVinyl,Vinyl newVinyl) {
+
+	private void updateAllCarts(Vinyl oldVinyl, Vinyl newVinyl) {
 		List<Item> updatedItems;
 		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
-		
+
 		updatedItems = itemRepository.findByVinylAndCart_CartState(newVinyl, activeCartState);
 
 		for (Item item : updatedItems) {
 			Double cartOldCost = item.getCart().getCost();
 			Double oldItemCost = item.getQuantity() * oldVinyl.getCost();
 			Double newItemCost = item.getQuantity() * newVinyl.getCost();
-			
+
 			item.getCart().setCost((cartOldCost - oldItemCost) + newItemCost);
 		}
-		
+
 		itemRepository.save(updatedItems);
 	}
 

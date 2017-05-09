@@ -26,4 +26,6 @@ public interface VinylRepository extends CrudRepository<Vinyl, Integer> {
 	VinylDetailsDto getVinylDetails(@Param("id") Integer id);
 	
 	
+	
+	
 }

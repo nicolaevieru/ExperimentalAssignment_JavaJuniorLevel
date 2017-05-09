@@ -22,7 +22,7 @@ public class VinylCreateIT extends AbstractTest {
 	public void testWhenProvidedRequestJSONIsValidReturnCreated() {
 		Long numberOfVinylsBeforeRequest = vinylRepository.count();
 
-		populateRequestJSON("123456", "Linkin Park", "120", "50");
+		populateRequestJSON(EXISTING_MANAGER_TOKEN, "Linkin Park", "120", "50");
 		Response response = sendPostRequest(URL);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SC_CREATED);
@@ -31,7 +31,7 @@ public class VinylCreateIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedCostIsLessThanZeroReturnBadRequest() {
-		populateRequestJSON("123456", "Linkin Park", "-120", "50");
+		populateRequestJSON(EXISTING_MANAGER_TOKEN, "Linkin Park", "-120", "50");
 
 		Response response = sendPostRequest(URL);
 
@@ -40,7 +40,7 @@ public class VinylCreateIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedStockIsLessThanZeroReturnBadRequest() {
-		populateRequestJSON("123456", "Linkin Park", "120", "-50");
+		populateRequestJSON(EXISTING_MANAGER_TOKEN, "Linkin Park", "120", "-50");
 
 		Response response = sendPostRequest(URL);
 
@@ -49,7 +49,7 @@ public class VinylCreateIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedCostIsNonNumericReturnBadRequest() {
-		populateRequestJSON("123456", "Linkin Park", "asdf", "50");
+		populateRequestJSON(EXISTING_MANAGER_TOKEN, "Linkin Park", "asdf", "50");
 
 		Response response = sendPostRequest(URL);
 
@@ -58,7 +58,7 @@ public class VinylCreateIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedStockIsNonNumericReturnBadRequest() {
-		populateRequestJSON("123456", "Linkin Park", "120", "asdf");
+		populateRequestJSON(EXISTING_MANAGER_TOKEN, "Linkin Park", "120", "asdf");
 
 		Response response = sendPostRequest(URL);
 
@@ -67,7 +67,7 @@ public class VinylCreateIT extends AbstractTest {
 
 	@Test
 	public void testWhenCustomerCreatesVinylReturnUNAUTHORIZED() {
-		populateRequestJSON("12345", "Linkin Park", "120", "50");
+		populateRequestJSON(EXISTING_CUSTOMER_TOKEN, "Linkin Park", "120", "50");
 
 		Response response = sendPostRequest(URL);
 
@@ -85,7 +85,7 @@ public class VinylCreateIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedNameIsNullReturnBadRequest() {
-		populateRequestJSON("123456", "", "120", "50");
+		populateRequestJSON(EXISTING_MANAGER_TOKEN, "", "120", "50");
 
 		Response response = sendPostRequest(URL);
 
@@ -94,7 +94,7 @@ public class VinylCreateIT extends AbstractTest {
 
 	@Test
 	public void testWhenCostIsNullReturn400() {
-		populateRequestJSON("123456", "Linkin Park", "", "50");
+		populateRequestJSON(EXISTING_MANAGER_TOKEN, "Linkin Park", "", "50");
 
 		Response response = sendPostRequest(URL);
 
@@ -103,7 +103,7 @@ public class VinylCreateIT extends AbstractTest {
 
 	@Test
 	public void testWhenProvidedStockIsNullReturnBadRequest() {
-		populateRequestJSON("123456", "Linkin Park", "120", "");
+		populateRequestJSON(EXISTING_MANAGER_TOKEN, "Linkin Park", "120", "");
 
 		Response response = sendPostRequest(URL);
 
@@ -111,10 +111,10 @@ public class VinylCreateIT extends AbstractTest {
 	}
 
 	private void populateRequestJSON(String token, String name, String cost, String stock) {
-		requestJSON.put("token", token);
-		requestJSON.put("name", name);
-		requestJSON.put("cost", cost);
-		requestJSON.put("stock", stock);
+		requestJson.put("token", token);
+		requestJson.put("name", name);
+		requestJson.put("cost", cost);
+		requestJson.put("stock", stock);
 	}
 
 }

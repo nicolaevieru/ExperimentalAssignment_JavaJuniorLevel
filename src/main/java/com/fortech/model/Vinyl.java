@@ -89,4 +89,5 @@ public class Vinyl {
 		this.stock = stock;
 	}
 
+	
 }
