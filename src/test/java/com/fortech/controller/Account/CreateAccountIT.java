@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import com.fortech.controller.AbstractTest;
 
 import io.restassured.http.ContentType;
-import io.restassured.specification.RequestSpecification;
 
 public class CreateAccountIT extends AbstractTest {
 	
