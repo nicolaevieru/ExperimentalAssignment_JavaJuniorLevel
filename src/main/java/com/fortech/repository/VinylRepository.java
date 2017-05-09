@@ -24,4 +24,6 @@ public interface VinylRepository extends CrudRepository<Vinyl, Integer> {
 	
 	@Query("select new com.fortech.model.dto.VinylDetailsDto(v.name, v.cost, v.stock) from Vinyl v WHERE v.available = true AND v.id =:id")
 	VinylDetailsDto getVinylDetails(@Param("id") Integer id);
+	
+	
 }

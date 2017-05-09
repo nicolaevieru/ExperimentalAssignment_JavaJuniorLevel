@@ -74,7 +74,7 @@ public class VinylController {
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<VinylDetailsDto> getDetails(@RequestHeader HttpHeaders header,
-			@PathVariable("id") Integer id) {
+		@PathVariable("id") Integer id) {
 
 		return new ResponseEntity<>(vinylService.getDetails(id, header.getFirst("token")), HttpStatus.OK);
 

@@ -20,6 +20,6 @@ public interface AccountRepository extends CrudRepository<Account, Integer> {
 	@Query("FROM Account a LEFT JOIN a.accountStatus accs WHERE (a.accountStatus.status != com.fortech.model.AccountStatusEnum.DELETED AND a.email = :email)")
 	Account findByEmailAndNotDeleted(@Param("email") String email);
 	
-	@Query("select new com.fortech.model.dto.CustomerDto(a.email, a.firstName, a.lastName) from Account a LEFT JOIN a.accountStatus accs WHERE a.accountStatus.status != com.fortech.model.AccountStatusEnum.DELETED AND a.accountType = com.fortech.model.AccountTypeEnum.CUSTOMER")
+	@Query("select new com.fortech.model.dto.CustomerDto(a.email, a.firstName, a.lastName) from Account a LEFT JOIN a.accountStatus accs WHERE a.accountStatus.status != com.fortech.model.AccountStatusEnum.DELETED AND a.accountType.type = com.fortech.model.AccountTypeEnum.CUSTOMER")
 	List<CustomerDto> getCustomers();
 }
