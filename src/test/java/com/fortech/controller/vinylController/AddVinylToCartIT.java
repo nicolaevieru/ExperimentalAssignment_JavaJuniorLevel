@@ -22,17 +22,17 @@ public class AddVinylToCartIT extends AbstractTest {
 	@Test
 	public void testWhenRequestJSONIsOkReturn202() {
 		populateRequestJSON("12345", "1");
-		Response response = sendPostRequest(requestJSON, URL);
-		
+		Response response = sendPostRequest(URL);
+
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SC_ACCEPTED);
-		
+
 	}
 
 	@Test
 	public void testWhenProvidedTokenIsInvalid() {
 		populateRequestJSON("00000", "1");
-		Response response = sendPostRequest(requestJSON, URL);
-		
+		Response response = sendPostRequest(URL);
+
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
 	}
 
@@ -67,7 +67,7 @@ public class AddVinylToCartIT extends AbstractTest {
 		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJSON).when()
 				.post("/api/vinyls/1000/cart").then().assertThat().statusCode(400);
 	}
-	
+
 	@Test
 	public void testWhenVinylIdDoesNotExistInDatabaseReturn400() {
 		populateRequestJSON("12345", "1");
