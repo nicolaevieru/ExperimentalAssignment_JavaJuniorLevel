@@ -12,7 +12,7 @@ import com.fortech.service.exception.ForbiddenException;
 @Component
 public class OrdersValidator extends Validator<Token> {
 
-	Integer userId;
+	Integer userId;	
 
 	@Autowired
 	TokenService tokenService;
@@ -20,20 +20,14 @@ public class OrdersValidator extends Validator<Token> {
 	@Override
 	public void validate() {
 		validateToken();
-		if (toValidate.getAccount().getId() != userId) {
-			validateIsManager();
+		if (!toValidate.getAccount().getId().equals(userId)) {
+			throw new ForbiddenException("Not authorised!");
 		}		
 	}
 
 	private void validateToken() {
 		if (toValidate == null) {
 			throw new BadRequestException("Invalid token");
-		}
-	}
-
-	private void validateIsManager() {
-		if (toValidate.getAccount().getAccountType().getType() != AccountTypeEnum.STORE_MANAGER) {
-			throw new ForbiddenException("Not authorised!");
 		}
 	}
 
