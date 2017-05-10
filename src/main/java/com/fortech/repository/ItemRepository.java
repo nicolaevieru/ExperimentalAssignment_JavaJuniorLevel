@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.fortech.model.Cart;
-import com.fortech.model.CartState;
 import com.fortech.model.Item;
 import com.fortech.model.Vinyl;
 
@@ -29,4 +27,4 @@ public interface ItemRepository extends CrudRepository<Item, Integer> {
 	List<Item> findByAccountInActiveCarts(@Param("id") Integer id); */
 	
 	Item findByVinylAndCartId(Vinyl vinyl,Integer cart);
-}
+	}

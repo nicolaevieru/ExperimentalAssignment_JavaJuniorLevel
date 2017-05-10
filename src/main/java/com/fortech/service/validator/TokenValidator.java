@@ -34,7 +34,7 @@ public class TokenValidator extends Validator<Token> {
 	}
 
 	private void validateSameAccountAsToken() {
-		if(toValidate.getAccount().getId() != accountId) {
+		if(!toValidate.getAccount().getId().equals(accountId)) {
 			logger.error("Error while trying to validate that account is the same as the token provided.");
 			throw new UnauthorizedException("Not authorised");
 		}
