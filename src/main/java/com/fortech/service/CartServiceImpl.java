@@ -10,6 +10,7 @@ import com.fortech.model.Token;
 import com.fortech.model.dto.ChangeOrderStatusDto;
 import com.fortech.repository.CartRepository;
 import com.fortech.repository.CartStateRepository;
+import com.fortech.service.exception.BadRequestException;
 import com.fortech.service.validator.CartStateValidator;
 import com.fortech.service.validator.IsManagerValidator;
 import com.fortech.service.validator.UpdateCartStateValidator;
@@ -38,6 +39,10 @@ public class CartServiceImpl implements CartService {
 		
 		Token token = tokenService.findByHash(newStatusDto.getToken());
 		Validator<ChangeOrderStatusDto> validator;
+		
+		if(cartRepository.findOne(id) == null) {
+			throw new BadRequestException("invalid order");
+		}
 		validator = new UpdateCartStateValidator(new IsManagerValidator(token), new CartStateValidator(newStatusDto.getStatus()));
 		validator.validate();
 		

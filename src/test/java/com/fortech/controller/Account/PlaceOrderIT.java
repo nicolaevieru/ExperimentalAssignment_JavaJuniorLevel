@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -75,6 +76,11 @@ public class PlaceOrderIT extends AbstractTest {
 		activeCart.setCost(0);
 		activeCart.setOrderDate(null);
 		cartRepository.save(activeCart);
+		cartRepository.deleteOtherCarts(EXISTING_CART_ID);
+	}
+	
+	@Before
+	public void destroy() {
 		cartRepository.deleteOtherCarts(EXISTING_CART_ID);
 	}
 	

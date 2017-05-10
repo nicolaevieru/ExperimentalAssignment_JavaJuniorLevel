@@ -1,5 +1,6 @@
 package com.fortech.service.validator;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,8 @@ import com.fortech.service.exception.ForbiddenException;
 @Component("deleteValidator")
 public class DeleteValidator extends Validator<AccountDeleteDto> {
 
+	Logger logger = Logger.getLogger(DeleteValidator.class);
+	
 	Token token;
 	Integer idToBeDeleted;
 
@@ -39,6 +42,7 @@ public class DeleteValidator extends Validator<AccountDeleteDto> {
 	private void validatePassword() {
 		PasswordEncoder encoder = new PasswordEncoder();
 		if (!encoder.getEncoder().matches(this.getToValidate().getPassword(), token.getAccount().getPasswordHash())) {
+			logger.error("Error while trying to validate password.");
 			throw new BadRequestException("Invalid password");
 		}
 
@@ -55,12 +59,14 @@ public class DeleteValidator extends Validator<AccountDeleteDto> {
 	private void validateToken() {
 		this.token = tokenService.findByHash(this.toValidate.getToken());
 		if (token == null) {
+			logger.error("Error while trying to validate token.");
 			throw new BadRequestException("Invalid token");
 		}
 	}
 
 	private void validateIsManager() {
 		if (token.getAccount().getAccountType().getType() != AccountTypeEnum.STORE_MANAGER) {
+			logger.error("Error while trying to validate that user is a manager.");
 			throw new ForbiddenException("Not authorised");
 		}
 	}

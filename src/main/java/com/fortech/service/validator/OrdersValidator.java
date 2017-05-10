@@ -1,5 +1,6 @@
 package com.fortech.service.validator;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import com.fortech.service.exception.ForbiddenException;
 
 @Component
 public class OrdersValidator extends Validator<Token> {
+	Logger logger = Logger.getLogger(OrdersValidator.class);
 
 	Integer userId;
 
@@ -20,12 +22,14 @@ public class OrdersValidator extends Validator<Token> {
 	public void validate() {
 		validateToken();
 		if (!toValidate.getAccount().getId().equals(userId)) {
+			logger.error("Error while trying to validate that user id does not belong to another user.");
 			throw new ForbiddenException("Not authorised!");
 		}		
 	}
 
 	private void validateToken() {
 		if (toValidate == null) {
+			logger.error("Error while trying to validate token.");
 			throw new BadRequestException("Invalid token");
 		}
 	}
