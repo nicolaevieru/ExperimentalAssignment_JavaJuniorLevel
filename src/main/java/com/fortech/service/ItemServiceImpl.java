@@ -28,7 +28,7 @@ public class ItemServiceImpl implements ItemService {
 			throw new UnauthorizedException("Invalid token");
 		}
 
-		Item itemToBeDeleted = itemRepository.findByIdInActiveCart(itemId);
+		Item itemToBeDeleted = itemRepository.findByIdInActiveCart(itemId, userId);
 		if (itemToBeDeleted == null) {
 			throw new BadRequestException("Invalid item");
 		}
