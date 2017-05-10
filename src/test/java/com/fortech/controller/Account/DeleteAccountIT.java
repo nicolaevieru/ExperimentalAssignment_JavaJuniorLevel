@@ -50,8 +50,7 @@ public class DeleteAccountIT extends AbstractTest {
 	@Test
 	public void testRequestWithManagerValidTokenReturnsNoContent() {
 		setRequestJson(MANAGER_TOKEN);
-		sendDeleteRequest(EXISTING_CUSTOMER_URL).then().assertThat().statusCode(HttpStatus.NO_CONTENT.value());
-
+		sendDeleteRequest(newCustomerURL).then().assertThat().statusCode(HttpStatus.NO_CONTENT.value());
 	}
 
 	@Test

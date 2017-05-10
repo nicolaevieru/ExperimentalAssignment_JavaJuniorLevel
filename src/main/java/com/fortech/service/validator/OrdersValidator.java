@@ -3,7 +3,6 @@ package com.fortech.service.validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fortech.model.AccountTypeEnum;
 import com.fortech.model.Token;
 import com.fortech.service.TokenService;
 import com.fortech.service.exception.BadRequestException;
@@ -12,7 +11,7 @@ import com.fortech.service.exception.ForbiddenException;
 @Component
 public class OrdersValidator extends Validator<Token> {
 
-	Integer userId;	
+	Integer userId;
 
 	@Autowired
 	TokenService tokenService;

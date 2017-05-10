@@ -32,6 +32,7 @@ import com.fortech.repository.AccountTypeRepository;
 import com.fortech.repository.CartRepository;
 import com.fortech.repository.CartStateRepository;
 import com.fortech.repository.ItemRepository;
+import com.fortech.service.exception.BadRequestException;
 import com.fortech.service.exception.ForbiddenException;
 import com.fortech.service.exception.UnauthorizedException;
 import com.fortech.service.validator.AccountValidator;
@@ -205,11 +206,19 @@ public class AccountServiceImpl implements AccountService {
 		List<OrderDto> allCustomerOrders = new ArrayList<>();
 
 		Token token = tokenService.findByHash(requestHeader.getFirst("token"));
-
-		ordersValidator.setToValidate(token);
-		ordersValidator.setUserId(userId);
-		ordersValidator.validate();
-
+		if (token == null) {
+			throw new BadRequestException("invalid token!");
+		}
+		if (userId.intValue() != token.getAccount().getId().intValue()) {
+			IsManagerValidator isManagerValidator = new IsManagerValidator();
+			isManagerValidator.setToValidate(token);
+			isManagerValidator.validate();
+		} else {
+			ordersValidator.setToValidate(token);
+			ordersValidator.setUserId(userId);
+			ordersValidator.validate();
+		}
+		
 		Account customerAccount = accountRepository.findOne(userId);
 		customerCarts = cartRepository.findByAccount(customerAccount);
 		

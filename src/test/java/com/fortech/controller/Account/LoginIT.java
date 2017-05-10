@@ -1,14 +1,13 @@
 package com.fortech.controller.Account;
 
-import static io.restassured.RestAssured.given;
-
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import com.fortech.controller.AbstractTest;
 import com.fortech.model.Account;
@@ -16,14 +15,13 @@ import com.fortech.model.AccountStatus;
 import com.fortech.model.AccountStatusEnum;
 import com.fortech.model.AccountType;
 import com.fortech.model.AccountTypeEnum;
+import com.fortech.repository.AccountRepository;
+import com.fortech.repository.TokenRepository;
 import com.fortech.service.AccountService;
-import com.fortech.service.TokenService;
-
-import io.restassured.http.ContentType;
 
 public class LoginIT extends AbstractTest {
 	
-	private Map<String, String> requestJson;
+	private static final String URL = "/api/users/login";
 	
 	private Account testAccount;
 	
@@ -31,41 +29,39 @@ public class LoginIT extends AbstractTest {
 	private AccountService accountService;
 	
 	@Autowired
-	private TokenService tokenService;
+	private AccountRepository accountRepository;
+	
+	@Autowired
+	private TokenRepository tokenRepository;
 	
 	
 	@Test
-	public void testLoginWithValidCredentialsReturns200() {
-		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users/login").then().assertThat().statusCode(200);
+	public void testLoginWithValidCredentialsReturnsOK() {
+		sendPostRequest(URL).then().assertThat().statusCode(HttpStatus.OK.value());
 	}
 
 	@Test
-	public void testLoginWithInvalidPasswordReturns400() {
+	public void testLoginWithInvalidPasswordReturnsBadRequest() {
 		requestJson.put("password", "Password");
-		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users/login").then().assertThat().statusCode(400);
+		sendPostRequest(URL).then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 
 	@Test
-	public void testLoginWithInvalidEmailReturns400() {
+	public void testLoginWithInvalidEmailReturnsBadRequest() {
 		requestJson.put("email", "nottheemail@email.com");
-		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users/login").then().assertThat().statusCode(400);
+		sendPostRequest(URL).then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
 	@Test
-	public void testLoginWithNullEmailReturns400() {
+	public void testLoginWithNullEmailReturnsBadRequest() {
 		requestJson.put("email", null);
-		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users/login").then().assertThat().statusCode(400);
+		sendPostRequest(URL).then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
 	@Test
-	public void testLoginWithNullPassword400() {
+	public void testLoginWithNullPasswordBadRequest() {
 		requestJson.put("password", null);
-		given().auth().basic(USERNAME, PASSWORD).port(PORT).contentType(ContentType.JSON).body(requestJson).when()
-		.post("/api/users/login").then().assertThat().statusCode(400);
+		sendPostRequest(URL).then().assertThat().statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
 	@Before
@@ -78,6 +74,7 @@ public class LoginIT extends AbstractTest {
 		testAccount.setFirstName("Firstname");
 		testAccount.setLastName("Lastname");
 		testAccount = accountService.save(testAccount);
+		
 		requestJson = new HashMap<>();
 		requestJson.put("email", "testemaila@email.com");
 		requestJson.put("password", "P@ssword123");
@@ -85,8 +82,8 @@ public class LoginIT extends AbstractTest {
 	
 	@After
 	public void destroy() {
-		tokenService.deleteAll();
-		accountService.deleteAll();
+		tokenRepository.deleteTokensForOtherAccounts(Arrays.asList(1000, 1001));
+		accountRepository.delete(testAccount);
 	}
 
 }
