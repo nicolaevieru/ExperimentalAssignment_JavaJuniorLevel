@@ -3,7 +3,6 @@ package com.fortech.service.validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fortech.model.AccountTypeEnum;
 import com.fortech.model.Token;
 import com.fortech.service.TokenService;
 import com.fortech.service.exception.BadRequestException;
@@ -21,19 +20,13 @@ public class OrdersValidator extends Validator<Token> {
 	public void validate() {
 		validateToken();
 		if (!toValidate.getAccount().getId().equals(userId)) {
-			validateIsManager();
+			throw new ForbiddenException("Not authorised!");
 		}		
 	}
 
 	private void validateToken() {
 		if (toValidate == null) {
 			throw new BadRequestException("Invalid token");
-		}
-	}
-
-	private void validateIsManager() {
-		if (toValidate.getAccount().getAccountType().getType() != AccountTypeEnum.STORE_MANAGER) {
-			throw new ForbiddenException("Not authorised!");
 		}
 	}
 

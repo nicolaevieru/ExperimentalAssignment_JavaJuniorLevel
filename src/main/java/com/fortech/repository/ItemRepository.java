@@ -5,11 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+
 import com.fortech.model.Cart;
 import com.fortech.model.CartState;
-import com.fortech.model.Item;
-import com.fortech.model.Vinyl;
-
 import com.fortech.model.Item;
 import com.fortech.model.Vinyl;
 
