@@ -30,7 +30,7 @@ public class GetInventoryIT extends AbstractTest{
 		List<Vinyl> vinyls = jsonPath.getList("vinyls");
 		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SC_OK);	
-		assertThat(vinyls.size()).isEqualTo(vinylRepository.getVinyls().size());
+		assertThat(vinyls.size()).isEqualTo(vinylRepository.getInventory().size());
 	}
 
 	@Test

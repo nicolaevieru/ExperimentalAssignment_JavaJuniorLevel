@@ -37,31 +37,25 @@ public class VinylController {
 	public ResponseEntity<Vinyl> createVinyl(@RequestBody VinylCreateDto vinylCreateDto) {
 
 		vinylService.save(vinylCreateDto);
-
 		return new ResponseEntity<>(HttpStatus.CREATED);
-
 	}
 
 	@RequestMapping(value = "{vinylId}/cart", method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Integer vinylId, @RequestBody Map<String,String> requestBody) {
-		
+	public ResponseEntity<Vinyl> addVinylToCart(@PathVariable Integer vinylId,
+			@RequestBody Map<String, String> requestBody) {
 		vinylService.addVinylToCart(vinylId, requestBody);
-
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
 	@RequestMapping(value = "inventory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<VinylInventoryListDto> getInventory(@RequestHeader HttpHeaders header) {
-
 		return new ResponseEntity<>(vinylService.getInventory(tokenService.findByHash(header.getFirst("token"))),
 				HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<VinylCanOrderListDto> getVinyls(@RequestHeader HttpHeaders header) {
-
 		return new ResponseEntity<>(vinylService.getVinyls(header.getFirst("token")), HttpStatus.OK);
-
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON)
@@ -69,25 +63,19 @@ public class VinylController {
 			@PathVariable("id") Integer id) {
 		vinylService.deleteVinyl(id, request.get("token"));
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<VinylDetailsDto> getDetails(@RequestHeader HttpHeaders header,
-		@PathVariable("id") Integer id) {
-
+			@PathVariable("id") Integer id) {
 		return new ResponseEntity<>(vinylService.getDetails(id, header.getFirst("token")), HttpStatus.OK);
-
 	}
 
 	@RequestMapping(value = "{vinylId}", method = RequestMethod.PUT, consumes = "application/json")
 	public ResponseEntity<Vinyl> updateVinylInfo(@PathVariable Integer vinylId,
 			@RequestBody VinylCreateDto vinylUpdateDto) {
-
 		vinylService.updateVinylInfo(vinylId, vinylUpdateDto);
-
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	
 }
