@@ -1,6 +1,7 @@
 package com.fortech.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -34,6 +36,18 @@ public class Cart {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "STATEID")
 	private CartState cartState;
+	
+	@OneToMany(cascade= CascadeType.PERSIST)
+	@JoinColumn(name = "CARTID")
+	private List<Item> items;
+
+	public List<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Item> items) {
+		this.items = items;
+	}
 
 	public Cart() {
 	}

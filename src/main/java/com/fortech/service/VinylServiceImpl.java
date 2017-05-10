@@ -83,8 +83,8 @@ public class VinylServiceImpl implements VinylService {
 		Vinyl vinyl = vinylRepository.findOne(vinylId);
 		Item item;
 
-		if ((item = itemRepository.findByVinylAndCart(vinyl, cart)) == null) {
-			item = new Item(vinylToCartDto.getQuantity(), cart, vinyl);
+		if ((item = itemRepository.findByVinylAndCartId(vinyl, cart.getId())) == null) {
+			item = new Item(vinylToCartDto.getQuantity(), cart.getId(), vinyl);
 		} else {
 			item.setQuantity(item.getQuantity() + vinylToCartDto.getQuantity());
 		}
@@ -172,31 +172,26 @@ public class VinylServiceImpl implements VinylService {
 		vinylUpdateValidator.validate();
 
 		Vinyl vinylToBeUpdated = vinylRepository.findOne(vinylId);
-		Vinyl oldVinyl = new Vinyl(vinylToBeUpdated);
-
 		vinylToBeUpdated.setName(vinylUpdateDto.getName());
 		vinylToBeUpdated.setCost(vinylUpdateDto.getCost());
 		vinylToBeUpdated.setStock(vinylUpdateDto.getStock());
-
 		vinylRepository.save(vinylToBeUpdated);
-		updateAllCarts(oldVinyl, vinylToBeUpdated);
+		updateAllCarts(vinylId);
 	}
+	
 
-	private void updateAllCarts(Vinyl oldVinyl, Vinyl newVinyl) {
-		List<Item> updatedItems;
-		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
+	private void updateAllCarts(Integer id) {
+		
+		List<Cart> cartsToBeUpdated = cartRepository.findByVinylInActiveCart(id);
 
-		updatedItems = itemRepository.findByVinylAndCart_CartState(newVinyl, activeCartState);
-
-		for (Item item : updatedItems) {
-			Double cartOldCost = item.getCart().getCost();
-			Double oldItemCost = item.getQuantity() * oldVinyl.getCost();
-			Double newItemCost = item.getQuantity() * newVinyl.getCost();
-
-			item.getCart().setCost((cartOldCost - oldItemCost) + newItemCost);
+		for (Cart cart : cartsToBeUpdated) {
+			Double newCartCost = 0.0;
+			for (Item i: cart.getItems()) {
+				newCartCost = newCartCost + (i.getQuantity()*i.getVinyl().getCost());
+			}
+			cart.setCost(newCartCost);
 		}
-
-		itemRepository.save(updatedItems);
+		cartRepository.save(cartsToBeUpdated);
 	}
 
 }

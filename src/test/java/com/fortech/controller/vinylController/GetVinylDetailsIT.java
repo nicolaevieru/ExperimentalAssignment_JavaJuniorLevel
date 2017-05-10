@@ -16,7 +16,7 @@ import io.restassured.response.Response;
 
 public class GetVinylDetailsIT extends AbstractTest {
 
-	private Integer vinylId = 1000;
+	private Integer vinylId = 1001;
 	private String URL = String.format("/api/vinyls/%d", vinylId);
 	
 	@Autowired

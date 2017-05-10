@@ -14,10 +14,19 @@ import com.fortech.model.Vinyl;
 public interface ItemRepository extends CrudRepository<Item, Integer> {
 	
 	List<Item>findByVinyl(Vinyl vinyl);
-	@Query("FROM Item i LEFT JOIN i.cart.cartState cs where (i.id =:id AND cs.type = com.fortech.model.CartStateEnum.ACTIVE)")
+	@Query("FROM Item")
 	Item findByIdInActiveCart(@Param("id") Integer id);
-	List<Item> findByCart(Cart cart);
-	List<Item> findByVinylAndCart_CartState(Vinyl vinyl,CartState cartstate);
-	Item findByVinylAndCart(Vinyl vinyl,Cart cart); 
-
+	List<Item> findByCartId(Integer id);
+/*	List<Item> findByVinylAndCart_CartState(Vinyl vinyl,CartState cartstate);*/
+	
+	@Query("SELECT i FROM Cart c JOIN c.items i WHERE c.id = i.id AND c.cartState.type = com.fortech.model.CartStateEnum.ACTIVE AND i.vinyl.id =:id")
+	List<Item> findByVinylIdInActiveCarts(@Param("id") Integer id);
+	
+	@Query("From Item")
+	List<Item> findByAccountInActiveCarts(@Param("id") Integer id);
+	
+/*	@Query("From Item i LEFT JOIN Cart c ON i.cartId = c.id LEFT JOIN c.account acc ON i.account.id = acc.id  WHERE c.cartState.type = com.fortech.model.CartStateEnum.ACTIVE AND c.account.id =:id")
+	List<Item> findByAccountInActiveCarts(@Param("id") Integer id); */
+	
+	Item findByVinylAndCartId(Vinyl vinyl,Integer cart);
 }

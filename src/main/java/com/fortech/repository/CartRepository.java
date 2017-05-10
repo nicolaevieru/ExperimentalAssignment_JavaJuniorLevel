@@ -28,6 +28,9 @@ public interface CartRepository extends CrudRepository<Cart, Integer> {
 	@Query("FROM Cart c WHERE c.account.id = :id and c.cartState.id = 1")
 	Cart findActiveByAccount(@Param("id") Integer id);
 	
+	@Query("SELECT c FROM Cart c JOIN c.items i WHERE i.vinyl.id = :id and c.cartState.id = 1")
+	List<Cart> findByVinylInActiveCart(@Param("id") Integer id);
+	
 	@Query("DELETE FROM Cart c WHERE c.id !=:id")
 	@Modifying
 	@Transactional
