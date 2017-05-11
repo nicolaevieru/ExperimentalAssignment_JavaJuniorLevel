@@ -29,6 +29,7 @@ public class ItemServiceImpl implements ItemService {
 		}
 
 		Item itemToBeDeleted = itemRepository.findOne(itemId);
+		
 		if (itemToBeDeleted == null) {
 			throw new BadRequestException("Invalid item");
 		}

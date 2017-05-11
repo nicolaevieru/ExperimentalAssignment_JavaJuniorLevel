@@ -182,7 +182,7 @@ public class AccountServiceImpl implements AccountService {
 		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
 		Cart activeCart = cartRepository.findByAccountAndCartState(userAccount, activeCartState);
 
-		itemList = (List<Item>) itemRepository.findByAccountInActiveCarts(userId);
+		itemList = itemRepository.findInActiveCartByAccount(userId);
 
 		for (Item item : itemList) {
 			String name = item.getVinyl().getName();

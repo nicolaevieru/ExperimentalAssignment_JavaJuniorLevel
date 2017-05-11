@@ -45,7 +45,7 @@ public class RemoveItemFromCartIT extends AbstractTest {
 	}
 	
 	@Test
-	public void testWhenRequestJsonAndUserIdAndItemIdAreOkReturnNoContent(){
+	public void testWhenRequestJsonAndUserIdAndItemIdAreValidReturnNoContent(){
 		Integer vinylStockBeforeRequest = vinylRepository.findOne(vinylId).getStock();
 		Double cartCostBeforeItemRemoval = cartRepository.findOne(EXISTING_CART_ID).getCost();
 		
