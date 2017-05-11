@@ -13,6 +13,7 @@ import com.fortech.model.Token;
 
 @Repository("tokenRepository")
 public interface TokenRepository extends CrudRepository<Token, Integer> {
+	
 	Token findByHash(String hash);
 	
 	@Query("FROM Token t LEFT JOIN t.account WHERE t.account.id = :id")

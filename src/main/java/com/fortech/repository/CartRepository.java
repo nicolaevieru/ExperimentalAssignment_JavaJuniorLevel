@@ -23,9 +23,6 @@ public interface CartRepository extends CrudRepository<Cart, Integer> {
 	@Query("FROM Cart c WHERE c.account.id = :id and c.cartState.id = :cartStateId")
 	Cart findByAccountIdAndCartStateId(@Param("id") Integer id,@Param("cartStateId") Integer cartStateId);
 	
-	@Query("FROM Cart c WHERE c.account.id = :id and c.cartState.id = 3")
-	List<Cart> findProcessingByAccount(@Param("id") Integer id);
-	
 	@Query("FROM Cart c WHERE c.account.id = :id and c.cartState.type = com.fortech.model.CartStateEnum.ACTIVE")
 	Cart findActiveCartByAccountId(@Param("id") Integer id);
 	

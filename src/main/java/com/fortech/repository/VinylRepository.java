@@ -14,7 +14,6 @@ import com.fortech.model.dto.VinylInventoryDto;
 
 @Repository("vinylRepository")
 public interface VinylRepository extends CrudRepository<Vinyl, Integer> {
-	Vinyl findByName(String name);
 
 	@Query("select new com.fortech.model.dto.VinylInventoryDto(v.id, v.name, v.stock) from Vinyl v")
 	List<VinylInventoryDto> getInventory();
