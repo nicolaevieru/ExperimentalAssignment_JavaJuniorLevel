@@ -21,30 +21,30 @@ import com.fortech.service.listener.AccountListener;
 @Entity
 @EntityListeners(AccountListener.class)
 public class Account {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HIBERNATE_SEQ")
-	@SequenceGenerator(name = "HIBERNATE_SEQ", sequenceName = "HIBERNATE_SEQ", allocationSize=1)
+	@SequenceGenerator(name = "HIBERNATE_SEQ", sequenceName = "HIBERNATE_SEQ", allocationSize = 1)
 	private Integer id;
-	
+
 	@Column(name = "PASSWORD_HASH")
 	private String passwordHash;
-	
+
 	private String email;
 	private String firstName;
 	private String lastName;
-	
+
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "status_id")
 	private AccountStatus accountStatus;
-	
+
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "type_id")
 	private AccountType accountType;
-	
-	@OneToMany(cascade= CascadeType.ALL, mappedBy = "account", fetch = FetchType.EAGER)
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "account", fetch = FetchType.EAGER)
 	List<Cart> carts;
-	
+
 	public List<Cart> getCarts() {
 		return carts;
 	}
@@ -64,7 +64,7 @@ public class Account {
 		this.accountType = new AccountType(AccountTypeEnum.CUSTOMER);
 		this.accountStatus = new AccountStatus(AccountStatusEnum.ACTIVE);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -101,7 +101,7 @@ public class Account {
 			return false;
 		return true;
 	}
-	
+
 	public AccountStatus getAccountStatus() {
 		return accountStatus;
 	}
@@ -169,5 +169,5 @@ public class Account {
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
 	}
-	
+
 }

@@ -21,7 +21,7 @@ public class CartServiceImpl implements CartService {
 
 	@Autowired
 	CartRepository cartRepository;
-	
+
 	@Autowired
 	CartStateRepository cartStateRepository;
 
@@ -36,22 +36,23 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public void updateState(Integer id, ChangeOrderStatusDto newStatusDto) {
-		
+
 		Token token = tokenService.findByHash(newStatusDto.getToken());
 		Validator<ChangeOrderStatusDto> validator;
-		
-		if(cartRepository.findOne(id) == null) {
+
+		if (cartRepository.findOne(id) == null) {
 			throw new BadRequestException("invalid order");
 		}
-		validator = new UpdateCartStateValidator(new IsManagerValidator(token), new CartStateValidator(newStatusDto.getStatus()));
+		validator = new UpdateCartStateValidator(new IsManagerValidator(token),
+				new CartStateValidator(newStatusDto.getStatus()));
 		validator.validate();
-		
+
 		updateState(id, newStatusDto.getStatus());
 	}
-	
+
 	@Override
 	public void updateState(Integer id, CartStateEnum newState) {
-		
+
 		Cart cart = cartRepository.findOne(id);
 		CartState cartState = cartStateRepository.findByType(newState);
 		cart.setCartState(cartState);

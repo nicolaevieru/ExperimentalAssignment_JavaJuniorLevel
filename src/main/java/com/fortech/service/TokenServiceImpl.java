@@ -12,15 +12,15 @@ import com.fortech.service.validator.LoginValidator;
 
 @Service("tokenService")
 public class TokenServiceImpl implements TokenService {
-	
+
 	private final static int PRIME = 41;
-	
+
 	@Autowired
 	TokenRepository tokenRepository;
-	
+
 	@Autowired
 	AccountRepository accountRepository;
-	
+
 	@Override
 	public Token save(AccountLoginDto emailAndPass) {
 		Token token = new Token();
@@ -43,14 +43,13 @@ public class TokenServiceImpl implements TokenService {
 	}
 
 	@Override
-	public Token findByHash(String token) {	
+	public Token findByHash(String token) {
 		return tokenRepository.findByHash(token);
 	}
-	
 
 	@Override
 	public void delete(Integer id) {
-		tokenRepository.delete(id);	
+		tokenRepository.delete(id);
 	}
 
 	@Override
@@ -61,6 +60,6 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public void deleteAll() {
 		tokenRepository.deleteAll();
-		
+
 	}
 }

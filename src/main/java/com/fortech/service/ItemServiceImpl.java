@@ -20,16 +20,16 @@ public class ItemServiceImpl implements ItemService {
 
 	@Autowired
 	ItemRepository itemRepository;
-	
+
 	@Autowired
 	VinylRepository vinylRepository;
-	
+
 	@Autowired
 	CartRepository cartRepository;
 
 	@Autowired
 	TokenService tokenService;
-	
+
 	@Autowired
 	VinylServiceImpl vinylService;
 
@@ -41,16 +41,16 @@ public class ItemServiceImpl implements ItemService {
 			throw new UnauthorizedException("Invalid token");
 		}
 
-		Item itemToBeDeleted = itemRepository.findOne(itemId);	
+		Item itemToBeDeleted = itemRepository.findOne(itemId);
 		if (itemToBeDeleted == null) {
 			throw new BadRequestException("Invalid item");
 		}
 
 		Validator<Token> validator = new TokenValidator(token, userId);
 		validator.validate();
-		
+
 		deleteItem(itemToBeDeleted);
-		
+
 	}
 
 	@Override
@@ -60,15 +60,15 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	public void deleteItem(Item itemToBeDeleted) {
-		
+
 		Cart cart = cartRepository.findOne(itemToBeDeleted.getCart().getId());
 		Vinyl vinyl = vinylRepository.findOne(itemToBeDeleted.getVinyl().getId());
 		vinyl.setStock(itemToBeDeleted.getVinyl().getStock() + itemToBeDeleted.getQuantity());
 		cart.setCost(cart.getCost() - (itemToBeDeleted.getQuantity() * vinyl.getCost()));
-		
+
 		vinylRepository.save(vinyl);
 		cartRepository.save(cart);
-		
+
 		itemRepository.delete(itemToBeDeleted.getId());
 	}
 

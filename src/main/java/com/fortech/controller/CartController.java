@@ -35,7 +35,7 @@ public class CartController {
 	}
 
 	@ExceptionHandler({ HttpMessageNotReadableException.class })
-	public void handleBadRequests(HttpServletResponse response) throws IOException{
+	public void handleBadRequests(HttpServletResponse response) throws IOException {
 		response.sendError(HttpStatus.BAD_REQUEST.value(), "Invalid order state or token");
 	}
 

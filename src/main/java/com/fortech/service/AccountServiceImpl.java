@@ -90,8 +90,7 @@ public class AccountServiceImpl implements AccountService {
 				return accountRepository.save(account);
 			}
 		}
-		
-		
+
 		if (accountType == null) {
 			accountType = accountTypeRepository.save(account.getAccountType());
 		}
@@ -101,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
 
 		account.setAccountType(accountType);
 		account.setAccountStatus(accountStatus);
-		
+
 		return accountRepository.save(account);
 	}
 
@@ -118,7 +117,7 @@ public class AccountServiceImpl implements AccountService {
 		Account account = new Account(toSave);
 		Account savedAccount = this.save(account);
 		createOpenCart(account);
-    
+
 		return savedAccount;
 	}
 
@@ -148,7 +147,7 @@ public class AccountServiceImpl implements AccountService {
 		deleteValidator.setIdToBeDeleted(id);
 		deleteValidator.setToValidate(credentials);
 		deleteValidator.validate();
-		
+
 		Token token = tokenService.findByHash(credentials.getToken());
 		tokenService.delete(token.getId());
 		delete(id);
@@ -156,8 +155,8 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public CartDetailsDto getCartDetails(Integer userId, HttpHeaders requestHeader) {
-		
-		if(requestHeader.getFirst("token") == null) {
+
+		if (requestHeader.getFirst("token") == null) {
 			throw new UnauthorizedException("token not valid!");
 		}
 
@@ -215,10 +214,10 @@ public class AccountServiceImpl implements AccountService {
 			ordersValidator.setUserId(userId);
 			ordersValidator.validate();
 		}
-		
+
 		Account customerAccount = accountRepository.findOne(userId);
 		customerCarts = cartRepository.findByAccountId(customerAccount.getId());
-		
+
 		for (Cart cart : customerCarts) {
 			Double cost = cart.getCost();
 			Date orderDate = cart.getOrderDate();
@@ -249,7 +248,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	private Cart findCustomerActiveCart(Token token, CartState activeCartState) {
-		return cartRepository.findByAccountIdAndCartState(token.getAccount().getId(),activeCartState);
+		return cartRepository.findByAccountIdAndCartState(token.getAccount().getId(), activeCartState);
 	}
 
 	@Override
@@ -263,7 +262,7 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void deleteAll() {
 		accountRepository.deleteAll();
-		
+
 	}
 
 }

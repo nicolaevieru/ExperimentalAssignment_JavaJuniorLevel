@@ -175,20 +175,19 @@ public class VinylServiceImpl implements VinylService {
 		vinylToBeUpdated.setName(vinylUpdateDto.getName());
 		vinylToBeUpdated.setCost(vinylUpdateDto.getCost());
 		vinylToBeUpdated.setStock(vinylUpdateDto.getStock());
-		
+
 		vinylRepository.save(vinylToBeUpdated);
 		updateAllCarts(vinylId);
 	}
-	
 
 	public void updateAllCarts(Integer vinylId) {
-		
+
 		List<Cart> cartsToBeUpdated = cartRepository.findByVinylInActiveCart(vinylId);
 
 		for (Cart cart : cartsToBeUpdated) {
 			Double newCartCost = 0.0;
-			for (Item i: cart.getItems()) {
-				newCartCost = newCartCost + (i.getQuantity()*i.getVinyl().getCost());
+			for (Item i : cart.getItems()) {
+				newCartCost = newCartCost + (i.getQuantity() * i.getVinyl().getCost());
 			}
 			cart.setCost(newCartCost);
 		}
