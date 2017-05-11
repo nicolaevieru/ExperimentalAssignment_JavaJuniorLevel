@@ -1,4 +1,4 @@
-package com.fortech.controller.Account;
+package com.fortech.controller.account;
 
 import java.util.Arrays;
 import java.util.HashMap;

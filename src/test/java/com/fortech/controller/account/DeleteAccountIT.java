@@ -1,4 +1,4 @@
-package com.fortech.controller.Account;
+package com.fortech.controller.account;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -81,7 +81,7 @@ public class DeleteAccountIT extends AbstractTest {
 		managerAccount = new Account();
 		managerAccount.setAccountStatus(new AccountStatus(AccountStatusEnum.ACTIVE));
 		managerAccount.setAccountType(new AccountType(AccountTypeEnum.STORE_MANAGER));
-		managerAccount.setEmail("man@email.com");
+		managerAccount.setEmail("delete@email.com");
 		managerAccount.setFirstName("Man");
 		managerAccount.setLastName("Man");
 		managerAccount.setPasswordHash(LOGIN_PASSWORD);
@@ -93,6 +93,7 @@ public class DeleteAccountIT extends AbstractTest {
 		managerToken = tokenRepository.save(managerToken);
 
 		customerAccount = new Account();
+		System.out.println("aa");
 		customerAccount.setAccountStatus(new AccountStatus(AccountStatusEnum.ACTIVE));
 		customerAccount.setAccountType(new AccountType(AccountTypeEnum.CUSTOMER));
 		customerAccount.setEmail("newcust@email.com");

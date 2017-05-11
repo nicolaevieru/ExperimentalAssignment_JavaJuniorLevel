@@ -1,4 +1,4 @@
-package com.fortech.controller.Account;
+package com.fortech.controller.account;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -7,11 +7,13 @@ import static org.junit.Assert.assertThat;
 import java.util.HashMap;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.fortech.controller.AbstractTest;
+import com.fortech.repository.AccountRepository;
 import com.fortech.service.AccountService;
 
 public class CreateAccountIT extends AbstractTest {
@@ -20,6 +22,9 @@ public class CreateAccountIT extends AbstractTest {
 	
 	@Autowired
 	private AccountService accountService;
+	
+	@Autowired
+	private AccountRepository accountRepository;
 	
 	@Test
 	public void testPostWithValidDataReturnsCreatedAndUserIsCreated() {
@@ -71,7 +76,5 @@ public class CreateAccountIT extends AbstractTest {
 		requestJson.put("email", "test@email.com");
 		requestJson.put("password", "P@ssword123");
 	}
-	
-	
 	
 }

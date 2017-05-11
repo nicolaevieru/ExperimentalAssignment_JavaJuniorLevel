@@ -84,7 +84,7 @@ public class VinylServiceImpl implements VinylService {
 		Item item;
 
 		if ((item = itemRepository.findByVinylAndCartId(vinyl, cart.getId())) == null) {
-			item = new Item(vinylToCartDto.getQuantity(), cart.getId(), vinyl);
+			item = new Item(vinylToCartDto.getQuantity(), cart, vinyl);
 		} else {
 			item.setQuantity(item.getQuantity() + vinylToCartDto.getQuantity());
 		}

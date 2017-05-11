@@ -1,8 +1,9 @@
-package com.fortech.controller.Account;
+package com.fortech.controller.account;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 

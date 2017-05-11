@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -21,8 +22,9 @@ public class Item {
 	@Column(name = "QUANTITY")
 	private int quantity;
 
-	@Column(name = "CARTID")
-	private Integer cartId;
+	@ManyToOne
+	@JoinColumn(name ="CARTID")
+	private Cart cart;
 
 	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "VINYLID")
@@ -31,15 +33,15 @@ public class Item {
 	public Item() {
 	}
 
-	public Item(int quantity, Integer cartId, Vinyl vinyl) {
+	public Item(int quantity, Cart cart, Vinyl vinyl) {
 		super();
 		this.quantity = quantity;
-		this.cartId = cartId;
+		this.cart = cart;
 		this.vinyl = vinyl;
 	}
 
-	public Integer getCartId() {
-		return cartId;
+	public Cart getCart() {
+		return cart;
 	}
 
 	public Integer getId() {
@@ -54,8 +56,8 @@ public class Item {
 		return vinyl;
 	}
 
-	public void setCart(Integer cartId) {
-		this.cartId = cartId;
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
 
 	public void setId(Integer id) {

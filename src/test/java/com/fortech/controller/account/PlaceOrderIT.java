@@ -1,4 +1,4 @@
-package com.fortech.controller.Account;
+package com.fortech.controller.account;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;

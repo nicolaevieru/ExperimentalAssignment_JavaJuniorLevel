@@ -1,4 +1,4 @@
-package com.fortech.controller.Account;
+package com.fortech.controller.account;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.fortech.controller.AbstractTest;
+import com.fortech.model.Cart;
+import com.fortech.model.CartStateEnum;
 import com.fortech.repository.AccountRepository;
 import com.fortech.repository.CartRepository;
+import com.fortech.repository.CartStateRepository;
 import com.fortech.repository.ItemRepository;
 
 import io.restassured.http.ContentType;
@@ -28,6 +31,9 @@ public class GetOrdersIT extends AbstractTest {
 	
 	@Autowired
 	AccountRepository accountRepository;
+	
+	@Autowired
+	private CartStateRepository cartStateRepository;
 
 	@Test
 	public void testGetOrdersWithManagerValidTokenReturnsOk() {
@@ -52,7 +58,6 @@ public class GetOrdersIT extends AbstractTest {
 	
 	@Test
 	public void testGetOrderWithValidCustomerTokenReturnsActiveCart() {
-		System.err.println(sendGetRequest(EXISTING_CUSTOMER_ORDERS_URL).body().asString());
 		sendGetRequest(EXISTING_CUSTOMER_ORDERS_URL).then().assertThat().body("cartState",hasItem("ACTIVE"));
 	}
 	
@@ -66,5 +71,12 @@ public class GetOrdersIT extends AbstractTest {
 	@Before
 	public void resetData() {
 		requestHeader = new Header("token", EXISTING_MANAGER_TOKEN);
+		
+		Cart activeCart = cartRepository.findOne(EXISTING_CART_ID);
+		activeCart.setCartState(cartStateRepository.findByType(CartStateEnum.ACTIVE));
+		activeCart.setCost(0);
+		activeCart.setOrderDate(null);
+		cartRepository.save(activeCart);
+		cartRepository.deleteOtherCarts(EXISTING_CART_ID);
 	}
 }
