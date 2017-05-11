@@ -7,13 +7,11 @@ import static org.junit.Assert.assertThat;
 import java.util.HashMap;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.fortech.controller.AbstractTest;
-import com.fortech.repository.AccountRepository;
 import com.fortech.service.AccountService;
 
 public class CreateAccountIT extends AbstractTest {
@@ -22,9 +20,6 @@ public class CreateAccountIT extends AbstractTest {
 	
 	@Autowired
 	private AccountService accountService;
-	
-	@Autowired
-	private AccountRepository accountRepository;
 	
 	@Test
 	public void testPostWithValidDataReturnsCreatedAndUserIsCreated() {
