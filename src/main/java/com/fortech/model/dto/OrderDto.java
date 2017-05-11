@@ -2,7 +2,6 @@ package com.fortech.model.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import com.fortech.model.CartStateEnum;
 

@@ -107,7 +107,7 @@ public class VinylServiceImpl implements VinylService {
 	}
 
 	private Cart findUserActiveCart(AddVinylToCartDto vinylToCartDto, CartState cartState) {
-		return cartRepository.findByAccountAndCartState(vinylToCartDto.getToken().getAccount(), cartState);
+		return cartRepository.findByAccountIdAndCartState(vinylToCartDto.getToken().getAccount().getId(), cartState);
 	}
 
 	private AddVinylToCartDto processRequestBody(Integer vinylId, Map<String, String> requestBody) {

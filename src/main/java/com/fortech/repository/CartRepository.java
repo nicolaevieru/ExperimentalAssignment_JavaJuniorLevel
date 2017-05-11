@@ -9,14 +9,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fortech.model.Account;
 import com.fortech.model.Cart;
 import com.fortech.model.CartState;
 
 @Repository(value = "cartRepository")
 public interface CartRepository extends CrudRepository<Cart, Integer> {
-	List<Cart> findByAccount(Account account);
-	Cart findByAccountAndCartState(Account account,CartState cartState);
+	
+	List<Cart> findByAccountId(Integer accountId);
+	
+	Cart findByAccountIdAndCartState(Integer accountId,CartState cartState);
 	List<Cart> findByCartState(CartState cartState);
 	
 	@Query("FROM Cart c WHERE c.account.id = :id and c.cartState.id = :cartStateId")
@@ -25,8 +26,8 @@ public interface CartRepository extends CrudRepository<Cart, Integer> {
 	@Query("FROM Cart c WHERE c.account.id = :id and c.cartState.id = 3")
 	List<Cart> findProcessingByAccount(@Param("id") Integer id);
 	
-	@Query("FROM Cart c WHERE c.account.id = :id and c.cartState.id = 1")
-	Cart findActiveByAccount(@Param("id") Integer id);
+	@Query("FROM Cart c WHERE c.account.id = :id and c.cartState.type = com.fortech.model.CartStateEnum.ACTIVE")
+	Cart findActiveCartByAccountId(@Param("id") Integer id);
 	
 	@Query("SELECT c FROM Cart c JOIN c.items i WHERE i.vinyl.id = :id and c.cartState.id = 1")
 	List<Cart> findByVinylInActiveCart(@Param("id") Integer id);

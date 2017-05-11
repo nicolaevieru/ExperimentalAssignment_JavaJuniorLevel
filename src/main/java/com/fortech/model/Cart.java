@@ -23,8 +23,8 @@ public class Cart {
 	@SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_seq", allocationSize = 1)
 	private Integer id;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "ACCOUNTID")
+	@ManyToOne
+	@JoinColumn(name ="ACCOUNTID")
 	private Account account;
 
 	@Column(name = "COST")
@@ -50,12 +50,6 @@ public class Cart {
 	}
 
 	public Cart() {
-	}
-
-	public Cart(Account account, CartState cartState) {
-		super();
-		this.account = account;
-		this.cartState = cartState;
 	}
 
 	public Account getAccount() {
