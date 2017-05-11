@@ -1,4 +1,4 @@
-package com.fortech.controller.Account;
+package com.fortech.controller.account;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
@@ -52,7 +52,9 @@ public class PlaceOrderIT extends AbstractTest {
 	public void testRequestWithValidCustomerTokenCreatesNewActiveCart() {
 		requestHeader = new Header("token", EXISTING_CUSTOMER_TOKEN);
 		sendPutRequest(EXISTING_CUSTOMER_ORDERS_URL);
-		assertNotEquals(EXISTING_CART_ID, cartRepository.findActiveByAccount(EXISTING_CUSTOMER_ID).getId().intValue());
+		cartRepository.findAll();
+		cartRepository.findActiveCartByAccountId(EXISTING_CUSTOMER_ID);
+		assertNotEquals(EXISTING_CART_ID, cartRepository.findActiveCartByAccountId(EXISTING_CUSTOMER_ID).getId().intValue());
 	}
 	
 	@Test
@@ -69,7 +71,7 @@ public class PlaceOrderIT extends AbstractTest {
 		assertNotNull(cartRepository.findByAccountIdAndCartStateId(EXISTING_CUSTOMER_ID, PROCESSING_CART_STATE_ID).getOrderDate());
 	}
 	
-	@After
+	@Before
 	public void resetData() {
 		Cart activeCart = cartRepository.findOne(EXISTING_CART_ID);
 		activeCart.setCartState(cartStateRepository.findByType(CartStateEnum.ACTIVE));
@@ -79,7 +81,7 @@ public class PlaceOrderIT extends AbstractTest {
 		cartRepository.deleteOtherCarts(EXISTING_CART_ID);
 	}
 	
-	@Before
+	@After
 	public void destroy() {
 		cartRepository.deleteOtherCarts(EXISTING_CART_ID);
 	}

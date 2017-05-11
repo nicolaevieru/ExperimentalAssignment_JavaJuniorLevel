@@ -84,7 +84,7 @@ public class VinylServiceImpl implements VinylService {
 		Item item;
 
 		if ((item = itemRepository.findByVinylAndCartId(vinyl, cart.getId())) == null) {
-			item = new Item(vinylToCartDto.getQuantity(), cart.getId(), vinyl);
+			item = new Item(vinylToCartDto.getQuantity(), cart, vinyl);
 		} else {
 			item.setQuantity(item.getQuantity() + vinylToCartDto.getQuantity());
 		}
@@ -107,7 +107,7 @@ public class VinylServiceImpl implements VinylService {
 	}
 
 	private Cart findUserActiveCart(AddVinylToCartDto vinylToCartDto, CartState cartState) {
-		return cartRepository.findByAccountAndCartState(vinylToCartDto.getToken().getAccount(), cartState);
+		return cartRepository.findByAccountIdAndCartState(vinylToCartDto.getToken().getAccount().getId(), cartState);
 	}
 
 	private AddVinylToCartDto processRequestBody(Integer vinylId, Map<String, String> requestBody) {
@@ -175,14 +175,15 @@ public class VinylServiceImpl implements VinylService {
 		vinylToBeUpdated.setName(vinylUpdateDto.getName());
 		vinylToBeUpdated.setCost(vinylUpdateDto.getCost());
 		vinylToBeUpdated.setStock(vinylUpdateDto.getStock());
+		
 		vinylRepository.save(vinylToBeUpdated);
 		updateAllCarts(vinylId);
 	}
 	
 
-	private void updateAllCarts(Integer id) {
+	public void updateAllCarts(Integer vinylId) {
 		
-		List<Cart> cartsToBeUpdated = cartRepository.findByVinylInActiveCart(id);
+		List<Cart> cartsToBeUpdated = cartRepository.findByVinylInActiveCart(vinylId);
 
 		for (Cart cart : cartsToBeUpdated) {
 			Double newCartCost = 0.0;

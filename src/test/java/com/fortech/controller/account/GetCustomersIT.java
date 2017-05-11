@@ -1,4 +1,4 @@
-package com.fortech.controller.Account;
+package com.fortech.controller.account;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -55,13 +55,13 @@ public class GetCustomersIT extends AbstractTest {
 		Account testAccount= new Account();
 		testAccount.setAccountStatus(new AccountStatus(AccountStatusEnum.ACTIVE));
 		testAccount.setAccountType(new AccountType(AccountTypeEnum.CUSTOMER));
-		testAccount.setEmail("newcust@email.com");
+		testAccount.setEmail("getcust@email.com");
 		testAccount.setFirstName("New");
 		testAccount.setLastName("New");
 		testAccount.setPasswordHash("password");
 		accountService.save(testAccount);
 		
-		sendGetRequest(URL).then().assertThat().body("customers.email", hasItem("newcust@email.com"));
+		sendGetRequest(URL).then().assertThat().body("customers.email", hasItem("getcust@email.com"));
 	}
 
 }

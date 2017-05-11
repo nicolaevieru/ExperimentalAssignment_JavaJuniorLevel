@@ -125,14 +125,11 @@ public class AccountServiceImpl implements AccountService {
 	private Cart createOpenCart(Account account) {
 		CartState cartState;
 		Cart firstCart = new Cart();
-		
-		cartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
-				
 		firstCart.setAccount(account);
+		cartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
 		firstCart.setCartState(cartState);
-
-		return cartRepository.save(firstCart);
-
+		firstCart = cartRepository.save(firstCart);
+		return firstCart;
 	}
 
 	@Override
@@ -180,9 +177,9 @@ public class AccountServiceImpl implements AccountService {
 
 		Account userAccount = accountRepository.findOne(userId);
 		CartState activeCartState = cartStateRepository.findByType(CartStateEnum.ACTIVE);
-		Cart activeCart = cartRepository.findByAccountAndCartState(userAccount, activeCartState);
+		Cart activeCart = cartRepository.findByAccountIdAndCartState(userAccount.getId(), activeCartState);
 
-		itemList = itemRepository.findInActiveCartByAccount(userId);
+		itemList = itemRepository.findActiveCartItemsByAccount(userId);
 
 		for (Item item : itemList) {
 			String name = item.getVinyl().getName();
@@ -220,7 +217,7 @@ public class AccountServiceImpl implements AccountService {
 		}
 		
 		Account customerAccount = accountRepository.findOne(userId);
-		customerCarts = cartRepository.findByAccount(customerAccount);
+		customerCarts = cartRepository.findByAccountId(customerAccount.getId());
 		
 		for (Cart cart : customerCarts) {
 			Double cost = cart.getCost();
@@ -252,7 +249,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	private Cart findCustomerActiveCart(Token token, CartState activeCartState) {
-		return cartRepository.findByAccountAndCartState(token.getAccount(),activeCartState);
+		return cartRepository.findByAccountIdAndCartState(token.getAccount().getId(),activeCartState);
 	}
 
 	@Override

@@ -2,10 +2,12 @@ package com.fortech.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fortech.model.Account;
 import com.fortech.model.dto.CustomerDto;
@@ -22,4 +24,9 @@ public interface AccountRepository extends CrudRepository<Account, Integer> {
 	
 	@Query("select new com.fortech.model.dto.CustomerDto(a.email, a.firstName, a.lastName) from Account a LEFT JOIN a.accountStatus accs WHERE a.accountStatus.status != com.fortech.model.AccountStatusEnum.DELETED AND a.accountType.type = com.fortech.model.AccountTypeEnum.CUSTOMER")
 	List<CustomerDto> getCustomers();
+	
+	@Query("DELETE FROM Account a WHERE a.id !=:id")
+	@Modifying
+	@Transactional
+	void deleteOtherAccount(Integer id);
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,8 +24,8 @@ public class Cart {
 	@SequenceGenerator(name = "hibernate_seq", sequenceName = "hibernate_seq", allocationSize = 1)
 	private Integer id;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "ACCOUNTID")
+	@ManyToOne
+	@JoinColumn(name ="ACCOUNTID")
 	private Account account;
 
 	@Column(name = "COST")
@@ -37,8 +38,7 @@ public class Cart {
 	@JoinColumn(name = "STATEID")
 	private CartState cartState;
 	
-	@OneToMany(cascade= CascadeType.PERSIST)
-	@JoinColumn(name = "CARTID")
+	@OneToMany(cascade = {CascadeType.REMOVE,CascadeType.MERGE},mappedBy = "cart", fetch = FetchType.EAGER)
 	private List<Item> items;
 
 	public List<Item> getItems() {
@@ -50,12 +50,6 @@ public class Cart {
 	}
 
 	public Cart() {
-	}
-
-	public Cart(Account account, CartState cartState) {
-		super();
-		this.account = account;
-		this.cartState = cartState;
 	}
 
 	public Account getAccount() {
